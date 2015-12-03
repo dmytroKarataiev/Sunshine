@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -111,15 +111,9 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                // gets text from the item in a listview
-                //TextView textView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
-                //String weatherInfo = textView.getText().toString();
+                Intent detailedWeather = new Intent(getActivity(), DetailActivity.class);
+                startActivity(detailedWeather);
 
-                // simpler way to get data from the item
-                String weatherInfo = forecastAdapter.getItem(position);
-                int duration = Toast.LENGTH_SHORT;
-
-                Toast.makeText(getActivity(), weatherInfo, duration).show();
             }
 
         });
