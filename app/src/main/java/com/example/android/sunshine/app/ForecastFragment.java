@@ -77,7 +77,7 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        String[] forecastArray = {
+        final String[] forecastArray = {
                 "Today - Sunny - 88 / 63",
                 "Tomorrow - Sunny - 87 / 62",
                 "Wednesday - Sunny - 92 / 65",
@@ -111,7 +111,9 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-                Intent detailedWeather = new Intent(getActivity(), DetailActivity.class);
+                String forecast = forecastAdapter.getItem(position);
+
+                Intent detailedWeather = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
                 startActivity(detailedWeather);
 
             }
