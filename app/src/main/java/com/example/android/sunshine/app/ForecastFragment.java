@@ -115,7 +115,7 @@ public class ForecastFragment extends Fragment {
                 //TextView textView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
                 //String weatherInfo = textView.getText().toString();
 
-                // simpler way to ge data from the item
+                // simpler way to get data from the item
                 String weatherInfo = forecastAdapter.getItem(position);
                 int duration = Toast.LENGTH_SHORT;
 
