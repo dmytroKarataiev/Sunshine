@@ -53,7 +53,7 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.forecast_fragment, menu);
     }
 
     @Override
@@ -69,6 +69,13 @@ public class ForecastFragment extends Fragment {
 
             return true;
         }
+
+        if (id == R.id.action_settings)
+        {
+            startActivity(new Intent(getActivity(), SettingsActivity.class));
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
