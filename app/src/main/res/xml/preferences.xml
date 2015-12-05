@@ -10,6 +10,7 @@
         android:inputType="text"
         android:singleLine="true"/>
 
+
     <SwitchPreference
         android:switchTextOff="@string/pref_metric_off"
         android:switchTextOn="@string/pref_metric_on"
