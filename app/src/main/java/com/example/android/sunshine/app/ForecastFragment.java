@@ -32,7 +32,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -42,6 +41,13 @@ public class ForecastFragment extends Fragment {
     private ArrayAdapter<String> forecastAdapter;
 
     public ForecastFragment() {
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        updateWeather();
     }
 
 
@@ -66,13 +72,7 @@ public class ForecastFragment extends Fragment {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
 
-            FetchWeatherTask weatherTask = new FetchWeatherTask();
-
-
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            String zip = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
-            
-            weatherTask.execute(zip);
+            updateWeather();
 
             return true;
         }
@@ -91,29 +91,12 @@ public class ForecastFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final String[] forecastArray = {
-                "Today - Sunny - 88 / 63",
-                "Tomorrow - Sunny - 87 / 62",
-                "Wednesday - Sunny - 92 / 65",
-                "Thursday - Sunny - 88 / 63",
-                "Friday - Sunny - 88 / 63",
-                "Saturday - Sunny - 88 / 63",
-                "Sunday - Sunny - 88 / 63",
-                "Monday - Sunny - 88 / 63",
-                "Today - Sunny - 88 / 63",
-                "Tomorrow - Sunny - 87 / 62",
-                "Wednesday - Sunny - 92 / 65",
-                "Thursday - Sunny - 88 / 63",
-                "Friday - Sunny - 88 / 63",
-                "Saturday - Sunny - 88 / 63",
-                "Sunday - Sunny - 88 / 63",
-                "Monday - Sunny - 88 / 63"
-        };
 
-
-        List<String> weekForecast = new ArrayList<>(Arrays.asList(forecastArray));
-
-        forecastAdapter = new ArrayAdapter<>(getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, weekForecast);
+        forecastAdapter = new ArrayAdapter<>(
+                getActivity(),
+                R.layout.list_item_forecast,
+                R.id.list_item_forecast_textview,
+                new ArrayList<String>());
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -158,6 +141,7 @@ public class ForecastFragment extends Fragment {
             // Will contain the raw JSON response as a string.
             String forecastJsonStr = null;
             int numDays = 14;
+            Log.v(LOG_TAG, params[0] + " " + params[1]);
 
             try {
                 // Construct the URL for the OpenWeatherMap query
@@ -173,7 +157,7 @@ public class ForecastFragment extends Fragment {
                 Uri builder = Uri.parse(FORECAST_BASE_URL).buildUpon()
                         .appendQueryParameter(QUERY_PARAM, params[0])
                         .appendQueryParameter(FORMAT_PARAM, "json")
-                        .appendQueryParameter(UNITS_PARAM, "metric")
+                        .appendQueryParameter(UNITS_PARAM, params[1])
                         .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
                         .appendQueryParameter("APPID", BuildConfig.OPEN_WEATHER_MAP_API_KEY)
                         .build();
@@ -228,7 +212,7 @@ public class ForecastFragment extends Fragment {
             }
             try {
                 String[] output = getWeatherDataFromJson(forecastJsonStr, numDays);
-                //Log.v("Data", output.toString());
+                Log.v("Data", Arrays.toString(output));
                 return output;
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Error ", e);
@@ -285,8 +269,8 @@ public class ForecastFragment extends Fragment {
             final String OWM_LIST = "list";
             final String OWM_WEATHER = "weather";
             final String OWM_TEMPERATURE = "temp";
-            final String OWM_MAX = "max";
-            final String OWM_MIN = "min";
+            final String OWM_MAX = "day";
+            final String OWM_MIN = "night";
             final String OWM_DESCRIPTION = "main";
 
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
@@ -346,6 +330,29 @@ public class ForecastFragment extends Fragment {
         }
 
 
+    }
+
+    public void updateWeather()
+    {
+        FetchWeatherTask weatherTask = new FetchWeatherTask();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String zip = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        Boolean measure = prefs.getBoolean(getString(R.string.pref_metric_key), true);
+
+        String metric;
+
+        if (measure)
+        {
+            metric = "metric";
+        }
+        else
+        {
+            metric = "imperial";
+        }
+
+
+        weatherTask.execute(zip, metric);
     }
 }
 
