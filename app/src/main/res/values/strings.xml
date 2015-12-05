@@ -16,5 +16,6 @@
     <string name="pref_metric_key" translatable="false">measurements</string>
 
     <string name="show_on_map">Show on map</string>
+    <string name="share">Share</string>
 
 </resources>

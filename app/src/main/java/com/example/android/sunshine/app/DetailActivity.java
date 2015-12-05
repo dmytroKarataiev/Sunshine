@@ -16,18 +16,24 @@
 
 package com.example.android.sunshine.app;
 
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class DetailActivity extends ActionBarActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +58,10 @@ public class DetailActivity extends ActionBarActivity {
         return true;
     }
 
+
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -66,6 +76,7 @@ public class DetailActivity extends ActionBarActivity {
             return true;
         }
 
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -74,7 +85,12 @@ public class DetailActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        private ShareActionProvider mShareActionProvider;
+        private String mForecast;
+        private String LOG_TAG = PlaceholderFragment.class.getSimpleName();
+
         public PlaceholderFragment() {
+            setHasOptionsMenu(true);
         }
 
         @Override
@@ -85,13 +101,44 @@ public class DetailActivity extends ActionBarActivity {
 
             // gets intent from the main activity and extra info
             Intent intent = getActivity().getIntent();
-            String forecastText = intent.getStringExtra(Intent.EXTRA_TEXT);
+            mForecast = intent.getStringExtra(Intent.EXTRA_TEXT);
 
             // sets text on textview in fragment detailed
             TextView forecast = (TextView) rootView.findViewById(R.id.forecast_detailed);
-            forecast.setText(forecastText);
+            forecast.setText(mForecast);
 
             return rootView;
+        }
+
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+
+            // Inflate the menu; this adds items to the action bar if it is present.
+            inflater.inflate(R.menu.detail_fragment, menu);
+
+            // Retrieve the share menu item
+            MenuItem item = menu.findItem(R.id.share);
+
+            // Get the provider and hold onto it to set/change the share intent.
+            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(weatherIntent());
+            }
+            else
+            {
+                Log.v(LOG_TAG, "fail");
+            }
+        }
+
+        private Intent weatherIntent() {
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            sendIntent.setType("text/plain");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, mForecast + " #Sunshine");
+
+            return sendIntent;
         }
     }
 }
