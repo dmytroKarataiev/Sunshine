@@ -25,6 +25,7 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new ForecastFragment())
                     .commit();
         }
+        Log.v("Create", "success");
     }
 
     @Override
@@ -79,5 +80,37 @@ public class MainActivity extends ActionBarActivity {
         }
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.v("Start", "success");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v("Resume", "success");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.v("Pause", "success");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.v("Stop", "success");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.v("Destroy", "success");
+    }
+
+
 
 }
