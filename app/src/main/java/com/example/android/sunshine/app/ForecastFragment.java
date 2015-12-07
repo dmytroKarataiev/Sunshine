@@ -149,7 +149,7 @@ public class ForecastFragment extends Fragment {
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are available at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
+                final String FORECAST_BASE_URL = "http://api.openweathermap.org/com.example.android.sunshine.app.data/2.5/forecast/daily?";
                 final String QUERY_PARAM = "zip";
                 final String FORMAT_PARAM = "mode";
                 final String UNITS_PARAM = "units";
@@ -197,7 +197,7 @@ public class ForecastFragment extends Fragment {
                 forecastJsonStr = buffer.toString();
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
-                // If the code didn't successfully get the weather data, there's no point in attempting
+                // If the code didn't successfully get the weather com.example.android.sunshine.app.data, there's no point in attempting
                 // to parse it.
                 return null;
             } finally {
@@ -259,7 +259,7 @@ public class ForecastFragment extends Fragment {
 
         /**
          * Take the String representing the complete forecast in JSON Format and
-         * pull out the data we need to construct the Strings needed for the wireframes.
+         * pull out the com.example.android.sunshine.app.data we need to construct the Strings needed for the wireframes.
          * <p/>
          * Fortunately parsing is easy:  constructor takes the JSON string and converts it
          * into an Object hierarchy for us.
@@ -279,10 +279,10 @@ public class ForecastFragment extends Fragment {
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
             // OWM returns daily forecasts based upon the local time of the city that is being
-            // asked for, which means that we need to know the GMT offset to translate this data
+            // asked for, which means that we need to know the GMT offset to translate this com.example.android.sunshine.app.data
             // properly.
 
-            // Since this data is also sent in-order and the first day is always the
+            // Since this com.example.android.sunshine.app.data is also sent in-order and the first day is always the
             // current day, we're going to take advantage of that to get a nice
             // normalized UTC date for all of our weather.
 

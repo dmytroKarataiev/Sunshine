@@ -23,7 +23,7 @@
             android:name=".DetailActivity"
             android:label="@string/title_activity_detail"
             android:parentActivityName="com.example.android.sunshine.app.MainActivity">
-            <meta-data
+            <meta-com.example.android.sunshine.app.data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
         </activity>
@@ -32,7 +32,7 @@
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName="com.example.android.sunshine.app.MainActivity">
-            <meta-data
+            <meta-com.example.android.sunshine.app.data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
         </activity>
