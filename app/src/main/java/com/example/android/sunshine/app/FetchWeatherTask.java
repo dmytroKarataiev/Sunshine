@@ -17,10 +17,8 @@ package com.example.android.sunshine.app;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.text.format.Time;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -70,20 +68,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
      * Prepare the weather high/lows for presentation.
      */
     private String formatHighLows(double high, double low) {
-        // Data is fetched in Celsius by default.
-        // If user prefers to see in Fahrenheit, convert the values here.
-        // We do this rather than fetching in Fahrenheit so that the user can
-        // change this option without us having to re-fetch the data once
-        // we start storing the values in a database.
-        SharedPreferences sharedPrefs =
-                PreferenceManager.getDefaultSharedPreferences(mContext);
-
-        Boolean unitType = sharedPrefs.getBoolean(mContext.getString(R.string.pref_metric_key), true);
-
-        if (!unitType) {
-            high = (high * 1.8) + 32;
-            low = (low * 1.8) + 32;
-        }
 
         // For presentation, assume the user doesn't care about tenths of a degree.
         long roundedHigh = Math.round(high);
@@ -314,7 +298,6 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
         String forecastJsonStr = null;
 
         String format = "json";
-        String units = "metric";
         int numDays = 14;
 
         try {
@@ -332,7 +315,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                     .appendQueryParameter(QUERY_PARAM, params[0])
                     .appendQueryParameter(FORMAT_PARAM, format)
-                    .appendQueryParameter(UNITS_PARAM, units)
+                    .appendQueryParameter(UNITS_PARAM, params[1])
                     .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
                     .appendQueryParameter(API_KEY, BuildConfig.OPEN_WEATHER_MAP_API_KEY)
                     .build();
