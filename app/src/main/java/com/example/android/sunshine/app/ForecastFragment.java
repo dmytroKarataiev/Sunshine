@@ -149,7 +149,7 @@ public class ForecastFragment extends Fragment {
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are available at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                final String FORECAST_BASE_URL = "http://api.openweathermap.org/com.example.android.sunshine.app.data/2.5/forecast/daily?";
+                final String FORECAST_BASE_URL = "http://api.openweathermap.org/data/2.5/forecast/daily?";
                 final String QUERY_PARAM = "zip";
                 final String FORMAT_PARAM = "mode";
                 final String UNITS_PARAM = "units";
