@@ -85,7 +85,6 @@ public class DetailActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
-        private ShareActionProvider mShareActionProvider;
         private String mForecast;
         private String LOG_TAG = PlaceholderFragment.class.getSimpleName();
 
@@ -101,11 +100,16 @@ public class DetailActivity extends ActionBarActivity {
 
             // gets intent from the main activity and extra info
             Intent intent = getActivity().getIntent();
-            mForecast = intent.getStringExtra(Intent.EXTRA_TEXT);
+
+            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+                mForecast = intent.getStringExtra(Intent.EXTRA_TEXT);
+            }
 
             // sets text on textview in fragment detailed
-            TextView forecast = (TextView) rootView.findViewById(R.id.forecast_detailed);
-            forecast.setText(mForecast);
+            if (mForecast != null) {
+                TextView forecast = (TextView) rootView.findViewById(R.id.forecast_detailed);
+                forecast.setText(mForecast);
+            }
 
             return rootView;
         }
@@ -120,7 +124,7 @@ public class DetailActivity extends ActionBarActivity {
             MenuItem item = menu.findItem(R.id.share);
 
             // Get the provider and hold onto it to set/change the share intent.
-            mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+            ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 
 
             if (mShareActionProvider != null) {
@@ -134,7 +138,7 @@ public class DetailActivity extends ActionBarActivity {
 
         private Intent weatherIntent() {
             Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
             sendIntent.setType("text/plain");
             sendIntent.putExtra(Intent.EXTRA_TEXT, mForecast + " #Sunshine");
 
