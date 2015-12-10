@@ -1,28 +1,30 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
+import com.example.android.sunshine.app.data.WeatherContract;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment {
+public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private ArrayAdapter<String> forecastAdapter;
+    private ForecastAdapter forecastAdapter;
+    private int FORECAST_LOADER = 0;
 
     public ForecastFragment() {
     }
@@ -67,8 +69,6 @@ public class ForecastFragment extends Fragment {
             return true;
         }
 
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -78,30 +78,12 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-        forecastAdapter = new ArrayAdapter<>(
-                getActivity(),
-                R.layout.list_item_forecast,
-                R.id.list_item_forecast_textview,
-                new ArrayList<String>());
+        forecastAdapter = new ForecastAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         ListView listWeather = (ListView) rootView.findViewById(R.id.listview_forecast);
         listWeather.setAdapter(forecastAdapter);
-
-        // adds listener to the items in a listview
-        listWeather.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                String forecast = forecastAdapter.getItem(position);
-
-                Intent detailedWeather = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
-                startActivity(detailedWeather);
-
-            }
-
-        });
 
         return rootView;
     }
@@ -110,24 +92,44 @@ public class ForecastFragment extends Fragment {
 
     public void updateWeather()
     {
-        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity(), forecastAdapter);
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String zip = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
-        Boolean measure = prefs.getBoolean(getString(R.string.pref_metric_key), true);
-
-        String metric;
-
-        if (measure) {
-            metric = "metric";
-        }
-        else {
-            metric = "imperial";
-        }
-
-
-        weatherTask.execute(zip, metric);
+        FetchWeatherTask weatherTask = new FetchWeatherTask(getActivity());
+        String zip = Utility.getPreferredLocation(getActivity());
+        weatherTask.execute(zip);
     }
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+
+        getLoaderManager().initLoader(FORECAST_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(locationSetting, System.currentTimeMillis());
+
+        return new CursorLoader(getActivity(), weatherForLocationUri, null, null, null, sortOrder);
+    }
+
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Swap the new cursor in.  (The framework will take care of closing the
+        // old cursor once we return.)
+        forecastAdapter.swapCursor(data);
+
+    }
+
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // This is called when the last Cursor provided to onLoadFinished()
+        // above is about to be closed.  We need to make sure we are no
+        // longer using it.
+        forecastAdapter.swapCursor(null);
+    }
+
 }
 
 

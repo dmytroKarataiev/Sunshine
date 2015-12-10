@@ -1,11 +1,8 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -25,7 +22,6 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new ForecastFragment())
                     .commit();
         }
-        Log.v("Create", "success");
     }
 
     @Override
@@ -61,10 +57,10 @@ public class MainActivity extends ActionBarActivity {
     private void openPreferredLocation() {
 
         // gets sharedpreferences parameter and converts it into Uri link
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String zip = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        String location = Utility.getPreferredLocation(this);
+
         Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
-                .appendQueryParameter("q", zip)
+                .appendQueryParameter("q", location)
                 .build();
 
         // starts geo intent
@@ -76,7 +72,7 @@ public class MainActivity extends ActionBarActivity {
             startActivity(intent);
         }
         else {
-            Log.d(LOG_TAG, "Couldn't call " + zip + ", no receiving apps installed!");
+            Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
         }
 
     }
@@ -84,31 +80,26 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.v("Start", "success");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v("Resume", "success");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.v("Pause", "success");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Log.v("Stop", "success");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.v("Destroy", "success");
     }
 
 
