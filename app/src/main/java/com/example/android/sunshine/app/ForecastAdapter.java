@@ -6,6 +6,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -59,13 +60,21 @@ public class ForecastAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         // our view is pretty simple here --- just a text view
         // we'll keep the UI functional with a simple (and slow!) binding.
-        TextView day = (TextView) view.findViewById(R.id.list_item_day_textview);
+
+        // Read weather icon ID from cursor
+        int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_ID);
+
+        // Use placeholder image for now
+        ImageView iconView = (ImageView) view.findViewById(R.id.list_item_icon);
+        iconView.setImageResource(R.drawable.ic_launcher);
+
         TextView weather = (TextView) view.findViewById(R.id.list_item_forecast_textview);
+        TextView day = (TextView) view.findViewById(R.id.list_item_day_textview);
         TextView max = (TextView) view.findViewById(R.id.list_item_high_textview);
         TextView min = (TextView) view.findViewById(R.id.list_item_low_textview);
 
-        day.setText(cursor.getString(ForecastFragment.COL_WEATHER_DESC));
-        weather.setText(Utility.formatDate(cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
+        weather.setText(cursor.getString(ForecastFragment.COL_WEATHER_DESC));
+        day.setText(Utility.getFriendlyDayString(view.getContext(), cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
 
         boolean isMetric = Utility.isMetric(mContext);
         double maxTemperature = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
