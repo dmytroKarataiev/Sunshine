@@ -68,23 +68,24 @@ public class ForecastAdapter extends CursorAdapter {
         ImageView iconView = (ImageView) view.findViewById(R.id.list_item_icon);
         iconView.setImageResource(R.drawable.ic_launcher);
 
+        // Description
         TextView weather = (TextView) view.findViewById(R.id.list_item_forecast_textview);
-        TextView day = (TextView) view.findViewById(R.id.list_item_day_textview);
-        TextView max = (TextView) view.findViewById(R.id.list_item_high_textview);
-        TextView min = (TextView) view.findViewById(R.id.list_item_low_textview);
-
         weather.setText(cursor.getString(ForecastFragment.COL_WEATHER_DESC));
-        day.setText(Utility.getFriendlyDayString(view.getContext(), cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
 
+        // Nicely formatted date
+        TextView day = (TextView) view.findViewById(R.id.list_item_day_textview);
+        day.setText(Utility.getFriendlyDayString(context, cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
+
+        // Metrix or Imperial boolean value
         boolean isMetric = Utility.isMetric(mContext);
+
+        // High temp +
+        TextView max = (TextView) view.findViewById(R.id.list_item_high_textview);
         double maxTemperature = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
+        max.setText(Utility.formatTemperature(maxTemperature, isMetric));
+
+        TextView min = (TextView) view.findViewById(R.id.list_item_low_textview);
         double minTemperature = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
-
-        String maxTemp = Utility.formatTemperature(maxTemperature, isMetric);
-        String minTemp = Utility.formatTemperature(minTemperature, isMetric);
-
-
-        max.setText(maxTemp);
-        min.setText(minTemp);
+        min.setText(Utility.formatTemperature(minTemperature, isMetric));
     }
 }
