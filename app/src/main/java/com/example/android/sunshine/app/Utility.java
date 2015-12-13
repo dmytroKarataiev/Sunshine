@@ -140,4 +140,22 @@ public class Utility {
         SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM dd");
         return monthDayFormat.format(dateInMillis);
     }
+
+    public static String getFormattedWind(Context context, float windSpeed, float degrees) {
+        int windFormat;
+        if (Utility.isMetric(context)) {
+            windFormat = R.string.format_wind_kmh;
+        } else {
+            windFormat = R.string.format_wind_mph;
+            windSpeed = .621371192237334f * windSpeed;
+        }
+
+        final String[] directionsText = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
+        final int DEGREES_TOTAL = 360;
+        final int DIR_TOTAL = 8;
+
+        String direction = directionsText[Math.round(degrees / (DEGREES_TOTAL / DIR_TOTAL)) % DIR_TOTAL];
+
+        return String.format(context.getString(windFormat), windSpeed, direction);
+    }
 }
