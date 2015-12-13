@@ -104,7 +104,7 @@ public class MainActivity extends ActionBarActivity {
             }
             mLocation = location;
         }
-        
+
         // change of UI if switch was pressed
         Boolean measurements = Utility.isMetric(this);
 
