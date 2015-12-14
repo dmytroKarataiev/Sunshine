@@ -64,7 +64,7 @@ public class MainActivity extends ActionBarActivity {
 
     private void openPreferredLocation() {
 
-        // gets sharedpreferences parameter and converts it into Uri link
+        // gets SharedPreferences parameter and converts it into Uri link
         String location = Utility.getPreferredLocation(this);
 
         Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
@@ -83,11 +83,6 @@ public class MainActivity extends ActionBarActivity {
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
         }
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override
@@ -118,22 +113,5 @@ public class MainActivity extends ActionBarActivity {
 
 
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-
 
 }

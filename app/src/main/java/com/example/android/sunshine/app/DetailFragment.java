@@ -66,7 +66,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static class ViewHolder {
 
         public final ImageView iconView;
-        public final TextView friednlyDateView;
+        public final TextView friendlyDateView;
         public final TextView dateView;
         public final TextView descriptionView;
         public final TextView highTempView;
@@ -77,7 +77,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         public ViewHolder(View view) {
             iconView = (ImageView) view.findViewById(R.id.detail_icon);
-            friednlyDateView = (TextView) view.findViewById(R.id.detail_day_textview);
+            friendlyDateView = (TextView) view.findViewById(R.id.detail_day_textview);
             dateView = (TextView) view.findViewById(R.id.detail_date_textview);
             descriptionView = (TextView) view.findViewById(R.id.detail_forecast_textview);
             highTempView = (TextView) view.findViewById(R.id.detail_high_textview);
@@ -129,7 +129,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private Intent weatherIntent() {
         Intent sendIntent = new Intent(Intent.ACTION_SEND);
-        sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        sendIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         sendIntent.setType("text/plain");
         sendIntent.putExtra(Intent.EXTRA_TEXT, mForecast + " #Sunshine");
 
@@ -183,7 +183,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         long date = data.getLong(COL_WEATHER_DATE);
         String friendlyDateText = Utility.getFriendlyDayString(getActivity(), date);
         String dateText = Utility.getFormattedMonthDay(getActivity(), date);
-        viewHolder.friednlyDateView.setText(friendlyDateText);
+        viewHolder.friendlyDateView.setText(friendlyDateText);
         viewHolder.dateView.setText(dateText);
 
         // High temp + min temp

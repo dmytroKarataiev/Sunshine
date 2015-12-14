@@ -61,7 +61,7 @@ public class ForecastAdapter extends CursorAdapter {
         // Choose the layout type
         int viewType = getItemViewType(cursor.getPosition());
 
-        int layoutId = -1;
+        int layoutId;
 
         if (viewType == VIEW_TYPE_TODAY) {
             layoutId = R.layout.list_item_forecast_today;
@@ -107,7 +107,7 @@ public class ForecastAdapter extends CursorAdapter {
         // Nicely formatted date
         viewHolder.dateView.setText(Utility.getFriendlyDayString(context, cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
 
-        // Metrix or Imperial boolean value
+        // Metric or Imperial boolean value
         boolean isMetric = Utility.isMetric(mContext);
 
         // High temp +
