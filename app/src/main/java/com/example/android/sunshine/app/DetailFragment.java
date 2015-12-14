@@ -173,7 +173,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         // Use placeholder image for now
         int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
-        viewHolder.iconView.setImageResource(R.drawable.ic_launcher);
+        viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
 
         // Description
         String description = data.getString(COL_WEATHER_DESC);
