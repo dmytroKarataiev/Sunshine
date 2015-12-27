@@ -132,6 +132,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         listWeather.setAdapter(forecastAdapter);
 
+        updateWeather();
+
         return rootView;
     }
 

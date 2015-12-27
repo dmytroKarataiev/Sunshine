@@ -119,8 +119,7 @@ public class WeatherProvider extends ContentProvider {
         // URI.  It's common to use NO_MATCH as the code for this case. Add the constructor below.
         final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = WeatherContract.CONTENT_AUTHORITY;
-
-
+        
         // 2) Use the addURI function to match each of the types.  Use the constants from
         // WeatherContract to help define the types to the UriMatcher.
         sURIMatcher.addURI(authority, WeatherContract.PATH_WEATHER, WEATHER);
