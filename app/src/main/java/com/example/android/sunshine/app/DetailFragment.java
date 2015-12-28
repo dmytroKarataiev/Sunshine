@@ -2,6 +2,7 @@ package com.example.android.sunshine.app;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -28,8 +29,11 @@ import com.example.android.sunshine.app.data.WeatherContract;
 public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private String LOG_TAG = DetailFragment.class.getSimpleName();
+    static final String DETAIL_URI = "URI";
+
     private ShareActionProvider mShareActionProvider;
     private String mForecast;
+    private Uri mUri;
 
     private int DETAIL_LOADER = 1;
     private ViewHolder viewHolder;
@@ -96,6 +100,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+        }
+
         View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
         viewHolder = new ViewHolder(rootView);
@@ -146,9 +155,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         Log.v(LOG_TAG, "In onCreateLoader");
 
-        Intent intent = getActivity().getIntent();
-
-        if (intent == null) {
+        if (mUri == null) {
             return null;
         }
 
@@ -156,7 +163,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // creating a Cursor for the data being displayed.
         return new CursorLoader(
                 getActivity(),
-                intent.getData(),
+                mUri,
                 FORECAST_COLUMNS,
                 null,
                 null,
@@ -228,6 +235,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Toast.makeText(getActivity(), "onLoaderReset", Toast.LENGTH_SHORT).show();
     }
 
-
+    void onLocationChanged( String newLocation ) {
+        // replace the uri, since the location has changed
+        Uri uri = mUri;
+        if (null != uri) {
+            long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
+            mUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(newLocation, date);
+            getLoaderManager().restartLoader(DETAIL_LOADER, null, this);
+        }
+    }
 
 }
