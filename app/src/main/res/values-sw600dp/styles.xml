@@ -2,6 +2,10 @@
 
     <style name="ForecastListStyle">
         <item name="android:choiceMode">singleChoice</item>
+        <item name="android:background">@drawable/touch_selector</item>
     </style>
 
+    <style name="ListItemBackground">
+        <item name="android:background">@drawable/touch_selector</item>
+    </style>
 </resources>

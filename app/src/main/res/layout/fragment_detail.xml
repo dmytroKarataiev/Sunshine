@@ -1,25 +1,33 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Header: Day, Date -->
         <TextView
             android:id="@+id/detail_day_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TODAY" />
+            android:fontFamily="sans-serif-condensed"
+            android:text="TODAY"
+            android:textAppearance="?android:textAppearanceLarge"
+            android:textSize="@dimen/detail_day_big" />
 
         <TextView
             android:id="@+id/detail_date_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="June 24" />
+            android:fontFamily="sans-serif-condensed"
+            android:text="June 24"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/detail_text"
+            android:textSize="@dimen/detail_day_small" />
 
         <!-- Main content: high, low, art, weather state -->
         <LinearLayout
@@ -40,13 +48,20 @@
                     android:id="@+id/detail_high_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="21°" />
+                    android:fontFamily="sans-serif-light"
+                    android:text="21°"
+                    android:textAppearance="?android:textAppearance"
+                    android:textSize="@dimen/detail_temp_big" />
 
                 <TextView
                     android:id="@+id/detail_low_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8°" />
+                    android:fontFamily="sans-serif-light"
+                    android:text="8°"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/detail_text"
+                    android:textSize="@dimen/detail_temp_small" />
             </LinearLayout>
 
             <LinearLayout
@@ -66,7 +81,11 @@
                     android:id="@+id/detail_forecast_textview"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Clear" />
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Clear"
+                    android:textAppearance="?android:textAppearanceSmall"
+                    android:textColor="@color/detail_text"
+                    android:textSize="@dimen/today_big" />
 
             </LinearLayout>
 
@@ -77,19 +96,31 @@
             android:id="@+id/detail_humidity_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="HUMIDITY" />
+            android:fontFamily="sans-serif-light"
+            android:text="HUMIDITY"
+            android:textAppearance="?android:textAppearance"
+            android:textSize="@dimen/today_big"
+            android:textColor="@color/detail_text" />
 
         <TextView
             android:id="@+id/detail_wind_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="WIND" />
+            android:fontFamily="sans-serif-light"
+            android:text="WIND"
+            android:textAppearance="?android:textAppearance"
+            android:textSize="@dimen/today_big"
+            android:textColor="@color/detail_text" />
 
         <TextView
             android:id="@+id/detail_pressure_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PRESSURE" />
+            android:fontFamily="sans-serif-light"
+            android:text="PRESSURE"
+            android:textAppearance="?android:textAppearance"
+            android:textSize="@dimen/today_big"
+            android:textColor="@color/detail_text" />
 
     </LinearLayout>
 

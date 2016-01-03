@@ -107,7 +107,9 @@ public class ForecastAdapter extends CursorAdapter {
         }
 
         // Description
-        viewHolder.descriptionView.setText(cursor.getString(ForecastFragment.COL_WEATHER_DESC));
+        String description = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
+        viewHolder.descriptionView.setText(description);
+        viewHolder.iconView.setContentDescription(description);
 
         // Nicely formatted date
         viewHolder.dateView.setText(Utility.getFriendlyDayString(context, cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));

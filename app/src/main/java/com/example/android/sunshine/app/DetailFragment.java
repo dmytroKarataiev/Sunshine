@@ -177,17 +177,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Log.v(LOG_TAG, "In onLoadFinished");
         if (!data.moveToFirst()) { return; }
 
-        // Use placeholder image for now
-        int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
-        viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
-
         // Description
         String description = data.getString(COL_WEATHER_DESC);
         viewHolder.descriptionView.setText(description);
 
+        // Use placeholder image for now
+        int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
+        viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
+        viewHolder.iconView.setContentDescription(description);
+
         // Nicely formatted date
         long date = data.getLong(COL_WEATHER_DATE);
-        String friendlyDateText = Utility.getFriendlyDayString(getActivity(), date);
+        String friendlyDateText = Utility.getDayName(getActivity(), date);
         String dateText = Utility.getFormattedMonthDay(getActivity(), date);
         viewHolder.friendlyDateView.setText(friendlyDateText);
         viewHolder.dateView.setText(dateText);

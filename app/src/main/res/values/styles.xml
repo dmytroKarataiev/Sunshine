@@ -27,4 +27,8 @@
         for two-pane layout -->
     </style>
 
+<style name="ListItemBackground">
+    <item name="android:background">@color/sunshine_blue</item>
+</style>
+
 </resources>
