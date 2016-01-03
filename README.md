@@ -1,19 +1,32 @@
 Sunshine
 ========
 
-Sunshine is the companion Android app for the Udacity course [Developing Android Apps: Android Fundamentals](https://www.udacity.com/course/ud853).
+This is the learning program written following an excellent Udacity course [Developing Android Apps: Android Fundamentals](https://www.udacity.com/course/ud853). 
 
-Take the course to find out how to build this app a step at a time, and eventually create your own Android App!
-
-This is the second version of the Sunshine code. The repository has been updated on:
-
-* **February 13th, 2015** - Major update
-* February 25, 2015 - Minor bug fixes
-* March 4th, 2015 - Minor bug fixes
-
-For the original version, please go [here](https://github.com/udacity/Sunshine).
-
-A changelog for the course can be found [here](https://docs.google.com/a/knowlabs.com/document/d/193xJb_OpcNCqgquMhxPrMh05IEYFXQqt0S6-6YK8gBw/pub).
+## Learned from developing the program
+* Android Studio, Gradle, and debugging tools
+* User Interface and Layout managers
+* ListViews and Adapters
+* Threading and ASyncTask
+* HTTP requests on web APIs
+* Android Permission System
+* App navigation with Explicit Intents
+* Implicit Intents to incorporate 3rd-party apps
+* Share Intent and the Android sharing framework
+* Broadcast Intents and Broadcast Receivers
+* Activity lifecycle and background activity termination
+* SQLite databases and JUnit tests
+* Creating and using a Content Provider as an abstraction layer
+* Using Loaders to asynchronously load data
+* Creating Adapters to bind UI components to Content Providers
+* Fundamental Android design principles
+* Supporting localization and variable screen sizes
+* Optimizing tablet UIs using Fragments
+* Accessibility Features
+* Custom views
+* Background services and alarms to schedule background tasks
+* Efficient background data transfers with SyncAdapters
+* Rich notifications to interact with users
 
 ## Important
 For the application to work you need to get openweather API key and put it into the gradle.properties file. 
