@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -59,6 +60,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
          * DetailFragmentCallback for when an item has been selected.
          */
         public void onItemSelected(Uri dateUri);
+        public void onLoaded(Uri dateUri);
     }
 
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
@@ -131,7 +133,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         listWeather = (ListView) rootView.findViewById(R.id.listview_forecast);
-
         listWeather.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long l) {
@@ -191,6 +192,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             listWeather.smoothScrollToPosition(mPosition);
         }
 
+        handler.sendEmptyMessage(MSG_UPDATE);
+
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -211,6 +214,23 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     }
 
+
+    // Show weather on first launch of the app
+    private int MSG_UPDATE = 1;
+    private android.os.Handler handler = new android.os.Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == MSG_UPDATE) {
+                if (forecastAdapter.getCursor() != null) {
+                    Cursor cursor = forecastAdapter.getCursor();
+                    cursor.moveToFirst();
+                    String locationSetting = Utility.getPreferredLocation(getActivity());
+                    ((ForecastFragment.Callback) getActivity()).onLoaded(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE)));
+                }
+
+            }
+        }
+    };
 }
 
 

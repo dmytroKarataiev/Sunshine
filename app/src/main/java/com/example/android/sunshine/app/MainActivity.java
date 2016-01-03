@@ -17,6 +17,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
     private String mLocation;
     private boolean isMetric;
     private boolean mTwoPane;
+    private boolean firstLaunch = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,5 +161,20 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         }
     }
 
+    @Override
+    public void onLoaded(Uri contentUri) {
+        if (mTwoPane && firstLaunch) {
+            firstLaunch = false;
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, contentUri);
 
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(args);
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
+                    .commit();
+
+        }
+    }
 }
