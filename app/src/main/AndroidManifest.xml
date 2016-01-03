@@ -17,6 +17,18 @@
 
         <service android:name=".service.SunshineService"/>
 
+        <!-- SyncAdapter's dummy authentication service -->
+        <service
+            android:name=".sync.SunshineAuthenticatorService"
+            >
+            <intent-filter>
+                <action android:name="android.accounts.AccountAuthenticator" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accounts.AccountAuthenticator"
+                android:resource="@xml/authenticator" />
+        </service>
+
         <receiver android:name=".service.SunshineService$AlarmReceiver" android:enabled="true"/>
 
         <activity
