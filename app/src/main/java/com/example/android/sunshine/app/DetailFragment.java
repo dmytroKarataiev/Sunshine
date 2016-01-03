@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 
@@ -232,7 +231,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // This is called when the last Cursor provided to onLoadFinished()
         // above is about to be closed.  We need to make sure we are no
         // longer using it.
-        Toast.makeText(getActivity(), "onLoaderReset", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "onLoaderReset", Toast.LENGTH_SHORT).show();
     }
 
     void onLocationChanged( String newLocation ) {
