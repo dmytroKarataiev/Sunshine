@@ -1,5 +1,8 @@
 package com.example.android.sunshine.app;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -166,9 +169,15 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     {
         String location = Utility.getPreferredLocation(getActivity());
 
-        Intent intent = new Intent(getActivity(), SunshineService.class);
+        // Standard intent with data for query
+        Intent intent = new Intent(getActivity(), SunshineService.AlarmReceiver.class);
         intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, location);
-        getActivity().startService(intent);
+
+        // Pending intent to fire after 5 secs for one time.
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5 * 1000, pendingIntent);
+
     }
 
 
@@ -230,9 +239,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             if (msg.what == MSG_UPDATE) {
                 if (forecastAdapter.getCursor() != null) {
                     Cursor cursor = forecastAdapter.getCursor();
-                    cursor.moveToFirst();
-                    String locationSetting = Utility.getPreferredLocation(getActivity());
-                    ((ForecastFragment.Callback) getActivity()).onLoaded(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE)));
+
+                    if (cursor.getCount() > 0) {
+                        cursor.moveToFirst();
+                        String locationSetting = Utility.getPreferredLocation(getActivity());
+                        ((ForecastFragment.Callback) getActivity()).onLoaded(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE)));
+                    }
                 }
 
             }

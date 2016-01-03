@@ -1,9 +1,11 @@
 package com.example.android.sunshine.app.service;
 
 import android.app.IntentService;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -71,7 +73,7 @@ public class SunshineService extends IntentService {
             final String API_KEY = "APPID";
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
-                    .appendQueryParameter(QUERY_PARAM, params)
+                    .appendQueryParameter(QUERY_PARAM, params + ",us")
                     .appendQueryParameter(FORMAT_PARAM, format)
                     .appendQueryParameter(UNITS_PARAM, "metric")
                     .appendQueryParameter(DAYS_PARAM, Integer.toString(numDays))
@@ -79,6 +81,8 @@ public class SunshineService extends IntentService {
                     .build();
 
             URL url = new URL(builtUri.toString());
+
+            Log.v(LOG_TAG, url.toString());
 
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -278,7 +282,7 @@ public class SunshineService extends IntentService {
 
                 inserted = resolver.bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, cvArray);
             }
-            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + inserted + " Inserted");
+            Log.d(LOG_TAG, "Sunshine Service Complete. " + inserted + " Inserted");
 
 
         } catch (JSONException e) {
@@ -326,6 +330,18 @@ public class SunshineService extends IntentService {
         }
         cursor.close();
         return locationId;
+    }
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Intent sendIntent = new Intent(context, SunshineService.class);
+            sendIntent.putExtra(LOCATION_QUERY_EXTRA, intent.getStringExtra(LOCATION_QUERY_EXTRA));
+
+            context.startService(sendIntent);
+            Log.v("Service", "started");
+        }
     }
 
 
