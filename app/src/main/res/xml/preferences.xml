@@ -18,5 +18,9 @@
         android:key="@string/pref_metric_key"
         android:defaultValue="true" />
 
+    <CheckBoxPreference
+        android:key="@string/notifications_key"
+        android:defaultValue="true"
+        android:summary="@string/notifications_title" />
 
 </PreferenceScreen>

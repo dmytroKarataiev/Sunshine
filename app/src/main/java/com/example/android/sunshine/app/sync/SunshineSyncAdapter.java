@@ -508,7 +508,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 mBuilder.setContentIntent(pendingIntent);
 
                 NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(WEATHER_NOTIFICATION_ID, mBuilder.build());
+
+                // If notifications on - show them
+                if (Utility.isNotificationsOn(getContext())) {
+                    notificationManager.notify(WEATHER_NOTIFICATION_ID, mBuilder.build());
+                }
 
                 //refreshing last sync
                 SharedPreferences.Editor editor = prefs.edit();

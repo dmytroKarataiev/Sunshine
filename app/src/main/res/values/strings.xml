@@ -58,4 +58,8 @@
     <!-- Strings related to Notification preference -->
     <string name="pref_last_notification">last_notification</string>
 
+    <!-- Notification Settings -->
+    <string name="notifications_key" translatable="false">notifications</string>
+    <string name="notifications_title">Show notifications</string>
+
 </resources>
