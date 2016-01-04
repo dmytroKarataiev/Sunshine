@@ -9,9 +9,6 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/map_location"
-        android:title="@string/show_on_map" />
 
 
 </menu>

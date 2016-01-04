@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,8 @@ import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
  */
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private final String LOG_TAG = ForecastFragment.class.getSimpleName();
+
     private ForecastAdapter forecastAdapter;
     private int FORECAST_LOADER = 0;
 
@@ -34,6 +37,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private int mPosition = ListView.INVALID_POSITION;
     private String SELECTED_POSITION = "position";
     private ListView listWeather;
+
+    private String mLocation;
 
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
@@ -119,6 +124,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             return true;
         }
 
+
+        if (id == R.id.map_location)
+        {
+            openPreferredLocation();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -200,6 +212,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         handler.sendEmptyMessage(MSG_UPDATE);
 
+        Cursor cursor = forecastAdapter.getCursor();
+
+        if (cursor != null && cursor.moveToFirst()) {
+
+            mLocation = cursor.getString(COL_COORD_LAT) + "," + cursor.getString(COL_COORD_LONG);
+
+        }
+
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -241,11 +261,39 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         }
     };
 
+    /**
+     * Method to check if layout is two pane
+     * @param useTodayLayout true or false depending on the device
+     */
     public void setUseTodayLayout(boolean useTodayLayout) {
         mUseTodayLayout = useTodayLayout;
         if (forecastAdapter != null) {
             forecastAdapter.setUseTodayLayout(mUseTodayLayout);
         }
+    }
+
+    private void openPreferredLocation() {
+
+        // gets SharedPreferences parameter and converts it into Uri link
+        if (mLocation.length() > 0) {
+            Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+                    .appendQueryParameter("q", mLocation)
+                    .build();
+
+            // starts geo intent
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(geoLocation);
+
+            // if there is a way to show the map - starts activity
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intent);
+            }
+            else {
+                Log.d(LOG_TAG, "Couldn't call " + mLocation + ", no receiving apps installed!");
+            }
+        }
+
+
     }
 }
 

@@ -369,7 +369,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             // delete old data
-            resolver.delete(WeatherContract.WeatherEntry.CONTENT_URI, WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?", new String[]{Long.toString(dayTime.setJulianDay(julianStartDay-1)) });
+            resolver.delete(WeatherContract.WeatherEntry.CONTENT_URI, WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?", new String[]{Long.toString(dayTime.setJulianDay(julianStartDay - 1)) });
 
             Log.d(LOG_TAG, "Sunshine Service Complete. " + inserted + " Inserted");
 
