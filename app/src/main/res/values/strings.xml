@@ -61,5 +61,8 @@
     <!-- Notification Settings -->
     <string name="notifications_key" translatable="false">notifications</string>
     <string name="notifications_title">Show notifications</string>
+    <string name="notifications_on">True</string>
+    <string name="notifications_off">False</string>
+
 
 </resources>
