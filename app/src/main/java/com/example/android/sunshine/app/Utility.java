@@ -41,7 +41,7 @@ public class Utility {
         return prefs.getBoolean(context.getString(R.string.pref_metric_key), true);
     }
 
-    static String formatTemperature(Context context, double temperature, boolean isMetric) {
+    public static String formatTemperature(Context context, double temperature, boolean isMetric) {
         double temp;
 
         if ( !isMetric ) {
