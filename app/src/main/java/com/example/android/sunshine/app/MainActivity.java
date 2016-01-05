@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.android.sunshine.app.libraries.ViewServer;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 
 
@@ -51,6 +52,8 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
         forecastFragment.setUseTodayLayout(!mTwoPane);
 
         SunshineSyncAdapter.initializeSyncAdapter(this);
+
+        ViewServer.get(this).addWindow(this);
 
     }
 
@@ -116,7 +119,7 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
             isMetric = measurements;
         }
 
-
+        ViewServer.get(this).setFocusedWindow(this);
     }
 
     @Override
@@ -155,4 +158,11 @@ public class MainActivity extends ActionBarActivity implements ForecastFragment.
 
         }
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ViewServer.get(this).removeWindow(this);
+    }
+
 }
