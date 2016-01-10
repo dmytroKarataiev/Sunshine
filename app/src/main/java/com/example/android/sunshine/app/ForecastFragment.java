@@ -148,6 +148,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         listWeather = (ListView) rootView.findViewById(R.id.listview_forecast);
+
+        View emptyView = rootView.findViewById(R.id.listview_forecast_empty);
+        listWeather.setEmptyView(emptyView);
+        listWeather.setAdapter(forecastAdapter);
+
         listWeather.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView adapterView, View view, int position, long l) {
@@ -162,8 +167,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 mPosition = position;
             }
         });
-
-        listWeather.setAdapter(forecastAdapter);
 
         updateWeather();
 

@@ -64,5 +64,8 @@
     <string name="notifications_on">True</string>
     <string name="notifications_off">False</string>
 
+    <!-- Empty weather database -->
+    <string name="empty_forecast_list">No Weather Information Available</string>
+
 
 </resources>

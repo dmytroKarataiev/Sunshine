@@ -8,5 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listview_forecast"/>
+    <TextView
+        android:id="@+id/listview_forecast_empty"
+        android:text="@string/empty_forecast_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/activity_vertical_margin"
+        android:gravity="center_horizontal"/>
 
 </FrameLayout>
