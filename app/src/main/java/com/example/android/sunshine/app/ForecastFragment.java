@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
@@ -223,6 +224,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
         }
 
+        updateEmptyView();
     }
 
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -295,9 +297,25 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 Log.d(LOG_TAG, "Couldn't call " + mLocation + ", no receiving apps installed!");
             }
         }
-
-
     }
+
+    /**
+     * If adapter has no data - update Empty view, based on Internet connectivity
+     */
+    private void updateEmptyView() {
+
+        if (forecastAdapter.getCount() == 0) {
+            TextView empty = (TextView) getView().findViewById(R.id.listview_forecast_empty);
+            if (null != empty) {
+                int message = R.string.empty_forecast_list;
+                if (!Utility.isConnected(getActivity())) {
+                    message = R.string.empty_forecast_list_no_network;
+                }
+                empty.setText(message);
+            }
+        }
+    }
+
 }
 
 
