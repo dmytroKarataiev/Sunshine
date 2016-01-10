@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res/com.example.android.sunshine.app"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditTextPreference
+    <com.example.android.sunshine.app.LocationEditTextPreference
+        custom:minLength="3"
         android:key="@string/pref_location_key"
         android:title="@string/pref_location_label"
         android:defaultValue="@string/pref_location_default"

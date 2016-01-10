@@ -27,13 +27,11 @@ public class SettingsActivity extends PreferenceActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Add 'general' preferences, defined in the XML file
-        // TODO: Add preferences from XML
         addPreferencesFromResource(R.xml.preferences);
+
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
-        // TODO: Add preferences
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
-
     }
 
     /**
@@ -65,9 +63,24 @@ public class SettingsActivity extends PreferenceActivity
             if (prefIndex >= 0) {
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
-        } else {
-            // For other preferences, set the summary to the value's simple string representation.
-            preference.setSummary(stringValue);
+        } else if (key.equals(getString(R.string.pref_location_key))) {
+            @SunshineSyncAdapter.LocationStatus int status = Utility.getLocationStatus(this);
+
+            switch (status) {
+                case SunshineSyncAdapter.LOCATION_STATUS_OK:
+                    preference.setSummary(stringValue);
+                    break;
+                case SunshineSyncAdapter.LOCATION_STATUS_UNKNOWN:
+                    preference.setSummary(getString(R.string.pref_location_unknown_description, stringValue));
+                    break;
+                case SunshineSyncAdapter.LOCATION_STATUS_INVALID:
+                    preference.setSummary(getString(R.string.pref_location_error_description, stringValue));
+                    break;
+                default:
+                    // For other preferences, set the summary to the value's simple string representation.
+                    preference.setSummary(stringValue);
+                    break;
+            }
         }
     }
 
@@ -87,6 +100,9 @@ public class SettingsActivity extends PreferenceActivity
             // first clear locationStatus
             Utility.setUnknownLocation(this);
             SunshineSyncAdapter.syncImmediately(this);
+        } else if (key.equals(getString(R.string.pref_location_status_key))) {
+            Preference locationPrefs = findPreference(getString(R.string.pref_location_key));
+            bindPreferenceSummaryToValue(locationPrefs);
         }
         //else if ( key.equals(getString(R.string.pref_metric_key)) ) {
             // units have changed. update lists of weather entries accordingly
