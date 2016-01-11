@@ -13,9 +13,10 @@
 
         <ImageView
             android:id="@+id/list_item_icon"
-            android:layout_gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
             android:src="@mipmap/ic_launcher" />
 
     </FrameLayout>

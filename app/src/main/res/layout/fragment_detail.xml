@@ -33,7 +33,7 @@
         <!-- Main content: high, low, art, weather state -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -76,7 +76,7 @@
                     android:id="@+id/detail_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_launcher" />
+                    android:adjustViewBounds="true" />
 
                 <TextView
                     android:id="@+id/detail_forecast_textview"
@@ -100,8 +100,8 @@
             android:fontFamily="sans-serif-light"
             android:text="HUMIDITY"
             android:textAppearance="?android:textAppearance"
-            android:textSize="@dimen/today_big"
-            android:textColor="@color/detail_text" />
+            android:textColor="@color/detail_text"
+            android:textSize="@dimen/today_big" />
 
         <TextView
             android:id="@+id/detail_wind_textview"
@@ -110,8 +110,8 @@
             android:fontFamily="sans-serif-light"
             android:text="WIND"
             android:textAppearance="?android:textAppearance"
-            android:textSize="@dimen/today_big"
-            android:textColor="@color/detail_text" />
+            android:textColor="@color/detail_text"
+            android:textSize="@dimen/today_big" />
 
         <TextView
             android:id="@+id/detail_pressure_textview"
@@ -120,8 +120,8 @@
             android:fontFamily="sans-serif-light"
             android:text="PRESSURE"
             android:textAppearance="?android:textAppearance"
-            android:textSize="@dimen/today_big"
-            android:textColor="@color/detail_text" />
+            android:textColor="@color/detail_text"
+            android:textSize="@dimen/today_big" />
 
     </LinearLayout>
 

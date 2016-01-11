@@ -10,6 +10,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 
+import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 
 /**
@@ -32,6 +33,7 @@ public class SettingsActivity extends PreferenceActivity
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_img_key)));
     }
 
     /**
@@ -103,6 +105,9 @@ public class SettingsActivity extends PreferenceActivity
         } else if (key.equals(getString(R.string.pref_location_status_key))) {
             Preference locationPrefs = findPreference(getString(R.string.pref_location_key));
             bindPreferenceSummaryToValue(locationPrefs);
+        } else if ( key.equals(getString(R.string.pref_img_key)) ) {
+            // art pack have changed. update lists of weather entries accordingly
+            getContentResolver().notifyChange(WeatherContract.WeatherEntry.CONTENT_URI, null);
         }
         //else if ( key.equals(getString(R.string.pref_metric_key)) ) {
             // units have changed. update lists of weather entries accordingly

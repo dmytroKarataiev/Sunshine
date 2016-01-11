@@ -28,4 +28,12 @@
         android:summaryOn="@string/notifications_on"
         android:summaryOff="@string/notifications_off"/>
 
+    <ListPreference
+        android:defaultValue="@string/pref_img_default"
+        android:dialogTitle="@string/pref_img_title"
+        android:entries="@array/pref_img_entries"
+        android:entryValues="@array/pref_img_values"
+        android:key="@string/pref_img_key"
+        android:title="@string/pref_img_title" />
+
 </PreferenceScreen>

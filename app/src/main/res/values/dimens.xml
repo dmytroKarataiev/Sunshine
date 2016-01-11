@@ -15,4 +15,6 @@
     <dimen name="detail_temp_big">96sp</dimen>
     <dimen name="detail_temp_small">48sp</dimen>
 
+    <dimen name="notification_large_icon_default">48dp</dimen>
+
 </resources>

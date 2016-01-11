@@ -73,8 +73,8 @@
                 android:fontFamily="sans-serif-light"
                 android:text="HUMIDITY"
                 android:textAppearance="?android:textAppearance"
-                android:textSize="@dimen/today_big"
-                android:textColor="@color/detail_text" />
+                android:textColor="@color/detail_text"
+                android:textSize="@dimen/today_big" />
 
             <TextView
                 android:id="@+id/detail_wind_textview"
@@ -83,8 +83,8 @@
                 android:fontFamily="sans-serif-light"
                 android:text="WIND"
                 android:textAppearance="?android:textAppearance"
-                android:textSize="@dimen/today_big"
-                android:textColor="@color/detail_text" />
+                android:textColor="@color/detail_text"
+                android:textSize="@dimen/today_big" />
 
             <TextView
                 android:id="@+id/detail_pressure_textview"
@@ -93,15 +93,15 @@
                 android:fontFamily="sans-serif-light"
                 android:text="PRESSURE"
                 android:textAppearance="?android:textAppearance"
-                android:textSize="@dimen/today_big"
-                android:textColor="@color/detail_text" />
+                android:textColor="@color/detail_text"
+                android:textSize="@dimen/today_big" />
 
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -109,6 +109,7 @@
                 android:id="@+id/detail_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
