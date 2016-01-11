@@ -7,17 +7,12 @@
     <string name="action_refresh">Оновити</string>
     <string name="title_activity_detail">Деталі</string>
     <string name="title_activity_settings">Налаштування</string>
-    <string name="pref_location_key" translatable="false">location</string>
+
     <string name="pref_location_label">Місцеположення</string>
     <string name="pref_location_default">90064</string>
-    <string name="pref_metric_off" translatable="false">Імперська</string>
-    <string name="pref_metric_on" translatable="false">Метрична</string>
-    <string name="pref_metric" translatable="false">Система вимірювання метрична</string>
-    <string name="pref_metric_key" translatable="false">measurements</string>
-
-    <string name="pref_location_status_key" translatable="false">loc-status</string>
-    <string name="pref_location_status_key_default" translatable="false">-1</string>
-
+    <string name="pref_metric_off">Імперська</string>
+    <string name="pref_metric_on">Метрична</string>
+    <string name="pref_metric">Система вимірювання метрична</string>
 
     <string name="show_on_map">Показати на карті</string>
     <string name="share">Поділитись</string>
@@ -54,10 +49,6 @@
     Прогноз: <xliff:g id="condition">%1$s</xliff:g> Макс: <xliff:g id="high">%2$s</xliff:g> Мін: <xliff:g id="low">%3$s</xliff:g></string>
 
     <!-- Strings related to Notification preference -->
-    <string name="pref_last_notification" translatable="false">last_notification</string>
-
-    <!-- Notification Settings -->
-    <string name="notifications_key" translatable="false">notifications</string>
     <string name="notifications_title">Показувати повідомлення</string>
     <string name="notifications_on">Так</string>
     <string name="notifications_off">Ні</string>
@@ -150,7 +141,7 @@
 
     <!-- Preference screen -->
     <string name="pref_img_title">Вигляд зображень</string>
-    <string name="pref_img_key" translatable="false">img-set</string>
+
     <string name="pref_img_default">https://raw.githubusercontent.com/udacity/Sunshine-Version-2/sunshine_master/app/src/main/res/drawable-xxhdpi/art_<xliff:g id="description">%s</xliff:g>.png</string>
     <string-array name="pref_img_entries">
         <item>Стандартні</item>
@@ -165,5 +156,8 @@
     </string-array>
 
     <string name="gcm_weather_alert">Увага: %1$s через %2$s!</string>
+
+    <!-- Will be fixed in new release -->
+    <string name="google_app_id">1:128292862738:android:83b792e26f07bf18</string>
 
 </resources>
