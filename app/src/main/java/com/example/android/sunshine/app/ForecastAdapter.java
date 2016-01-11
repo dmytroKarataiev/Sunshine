@@ -107,8 +107,9 @@ public class ForecastAdapter extends CursorAdapter {
         }
 
         // Description
-        String description = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
+        String description = Utility.getStringForWeatherCondition(context, weatherId);
         viewHolder.descriptionView.setText(description);
+        viewHolder.descriptionView.setContentDescription(context.getString(R.string.a11y_forecast, description));
         viewHolder.iconView.setContentDescription(description);
 
         // Nicely formatted date
@@ -120,8 +121,11 @@ public class ForecastAdapter extends CursorAdapter {
         // High temp +
         double maxTemperature = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
         viewHolder.highTempView.setText(Utility.formatTemperature(context, maxTemperature, isMetric));
+        viewHolder.highTempView.setContentDescription(viewHolder.highTempView.getText());
 
         double minTemperature = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
         viewHolder.lowTempView.setText(Utility.formatTemperature(context, minTemperature, isMetric));
+        viewHolder.lowTempView.setContentDescription(viewHolder.lowTempView.getText());
+
     }
 }

@@ -180,11 +180,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         // Description
         String description = data.getString(COL_WEATHER_DESC);
         viewHolder.descriptionView.setText(description);
+        viewHolder.descriptionView.setContentDescription(getString(R.string.a11y_forecast, description));
 
         // Use placeholder image for now
         int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
         viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
-        viewHolder.iconView.setContentDescription(description);
+        viewHolder.iconView.setContentDescription(getString(R.string.a11y_forecast_icon, description));
 
         // Nicely formatted date
         long date = data.getLong(COL_WEATHER_DATE);
@@ -199,23 +200,28 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         double maxTemperature = data.getDouble(COL_WEATHER_MAX_TEMP);
         String high = Utility.formatTemperature(getActivity(), maxTemperature, isMetric);
         viewHolder.highTempView.setText(high);
+        viewHolder.highTempView.setContentDescription(getString(R.string.a11y_high_temp, high));
 
         double minTemperature = data.getDouble(COL_WEATHER_MIN_TEMP);
         String low = Utility.formatTemperature(getActivity(), minTemperature, isMetric);
         viewHolder.lowTempView.setText(low);
+        viewHolder.highTempView.setContentDescription(getString(R.string.a11y_low_temp, low));
 
         // Humidity
         float humidity = data.getFloat(COL_WEATHER_HUMIDITY);
         viewHolder.humidityView.setText(getActivity().getString(R.string.format_humidity, humidity));
+        viewHolder.humidityView.setContentDescription(viewHolder.humidityView.getText());
 
         // Wind speed and direction
         float windSpeed = data.getFloat(COL_WEATHER_WIND);
         float degrees = data.getFloat(COL_WEATHER_DEGREES);
         viewHolder.windView.setText(Utility.getFormattedWind(getActivity(), windSpeed, degrees));
+        viewHolder.windView.setContentDescription(viewHolder.windView.getText());
 
         // Pressure
         float pressure = data.getFloat(COL_WEATHER_PRESSURE);
         viewHolder.pressureView.setText(getActivity().getString(R.string.format_pressure, pressure));
+        viewHolder.pressureView.setContentDescription(viewHolder.pressureView.getText());
 
         // Share Intent
         mForecast = String.format("%s - %s - %s/%s", dateText, description, high, low);
