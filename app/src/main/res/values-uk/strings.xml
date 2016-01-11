@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="app_name">Сонечко</string>
+    <string name="hello_world">Привіт!</string>
+    <string name="action_settings">Налаштування</string>
+    <string name="action_refresh">Оновити</string>
+    <string name="title_activity_detail">Деталі</string>
+    <string name="title_activity_settings">Налаштування</string>
+    <string name="pref_location_key" translatable="false">location</string>
+    <string name="pref_location_label">Місцеположення</string>
+    <string name="pref_location_default">90064</string>
+    <string name="pref_metric_off" translatable="false">Імперська</string>
+    <string name="pref_metric_on" translatable="false">Метрична</string>
+    <string name="pref_metric" translatable="false">Система вимірювання метрична</string>
+    <string name="pref_metric_key" translatable="false">measurements</string>
+
+    <string name="pref_location_status_key" translatable="false">loc-status</string>
+    <string name="pref_location_status_key_default" translatable="false">-1</string>
+
+
+    <string name="show_on_map">Показати на карті</string>
+    <string name="share">Поділитись</string>
+
+    <!-- Date label when displaying today's weather forecast [CHAR LIMIT=20] -->
+    <string name="today">Сьогодні</string>
+
+    <!-- Date label when displaying tomorrow's weather forecast [CHAR LIMIT=20] -->
+    <string name="tomorrow">Завтра</string>
+
+    <!-- Date format for displaying day of week and date (i.e. Mon Jun 1) [CHAR LIMIT=20] -->
+    <string name="format_full_friendly_date"><xliff:g id="date">%1$s</xliff:g>, <xliff:g id="day">%2$s</xliff:g></string>
+
+    <!-- Temperature formats in degrees [CHAR LIMIT=NONE] -->
+    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
+
+    <!-- Windspeed formats -->
+    <!-- Wind in mph [CHAR LIMIT=25] -->
+    <string name="format_wind_mph">Вітер: <xliff:g id="speed">%1$1.0f</xliff:g> миль/год <xliff:g id="direction">%2$s</xliff:g></string>
+
+    <!-- Wind in kph [CHAR LIMIT=25] -->
+    <string name="format_wind_kmh">Вітер: <xliff:g id="speed">%1$1.0f</xliff:g> км/год <xliff:g id="direction">%2$s</xliff:g></string>
+
+    <!-- Pressure format CHAR LIMIT=25] -->
+    <string name="format_pressure">Тиск: <xliff:g id="pressure">%1.0f</xliff:g> гПа</string>
+
+    <!-- Humidity format CHAR LIMIT=25]-->
+    <string name="format_humidity">Вологість: <xliff:g id="humidity">%1.0f</xliff:g> %%</string>
+
+    <!-- SyncAdapter related -->
+
+    <!-- Notification Format -->
+    <string name="format_notification">
+    Прогноз: <xliff:g id="condition">%1$s</xliff:g> Макс: <xliff:g id="high">%2$s</xliff:g> Мін: <xliff:g id="low">%3$s</xliff:g></string>
+
+    <!-- Strings related to Notification preference -->
+    <string name="pref_last_notification" translatable="false">last_notification</string>
+
+    <!-- Notification Settings -->
+    <string name="notifications_key" translatable="false">notifications</string>
+    <string name="notifications_title">Показувати повідомлення</string>
+    <string name="notifications_on">Так</string>
+    <string name="notifications_off">Ні</string>
+
+    <!-- Empty weather database -->
+    <string name="empty_forecast_list">Немає інформації про погоду на данний час</string>
+    <string name="empty_forecast_list_no_network">Немає інформації про погоду на данний час, перевірте з\'єднання з інтернетом.</string>
+    <string name="empty_forecast_list_server_down">Немає інформації про погоду на данний час. Сервер не повертає інформації.</string>
+    <string name="empty_forecast_list_server_error">Немає інформації про погоду на данний час. Сервер повертає некоректну інформацію. Будь ласка перевірте оновлення програми.</string>
+    <string name="empty_forecast_list_invalid_location">Немає інформації про погоду на данний час. Місцеположення не було розпізнано сервером.</string>
+
+    <!-- Strings used when displaying the state of the Location in settings -->
+    <string name="pref_location_error_description">Невірне місце (<xliff:g id="location_setting">%1$s</xliff:g>)"</string>
+    <string name="pref_location_unknown_description">Перевірка місця&#8230; (<xliff:g id="location_setting">%1$s</xliff:g>)"</string>
+
+    <!-- A11y -->
+    <string name="a11y_forecast">Прогноз: <xliff:g id="condition">%1$s</xliff:g></string>
+    <string name="a11y_forecast_icon">Зображення погоди: <xliff:g id="condition">%1$s</xliff:g></string>
+    <string name="a11y_high_temp">Максимальна: <xliff:g id="high">%1$s</xliff:g></string>
+    <string name="a11y_low_temp">Мінімальна: <xliff:g id="low">%1$s</xliff:g></string>
+
+    <!-- Weather Conditions -->
+    <string name="condition_2xx">Шторм</string>
+    <string name="condition_3xx">Мряка</string>
+    <string name="condition_500">Легкий дощ</string>
+    <string name="condition_501">Середній дощ</string>
+    <string name="condition_502">Сильний дощ</string>
+    <string name="condition_503">Дуже сильний дощ</string>
+    <string name="condition_504">Екстремальний дощ</string>
+    <string name="condition_511">Крижаний дощ</string>
+    <string name="condition_520">Легка злива</string>
+    <string name="condition_521">Ливень</string>
+    <string name="condition_522">Сильна злива</string>
+    <string name="condition_531">Короткочасні зливи</string>
+    <string name="condition_600">Легкий сніг</string>
+    <string name="condition_601">Сніг</string>
+    <string name="condition_602">Сильний сніг</string>
+    <string name="condition_611">Дощ зі снігом</string>
+    <string name="condition_612">Сильний мокрий сніг</string>
+    <string name="condition_615">Легкий дощ зі снігом</string> <!-- light rain and snow -->
+    <string name="condition_616">Легкий дощ зі снігом</string>
+    <string name="condition_620">Злива зі снігом</string> <!-- light shower snow -->
+    <string name="condition_621">Злива зі снігом</string>
+    <string name="condition_622">Злива зі снігом</string> <!-- heavy shower snow -->
+    <string name="condition_701">Туман</string>
+    <string name="condition_711">Дим</string>
+    <string name="condition_721">Димка</string>
+    <string name="condition_731">Пісок, пилюка</string>
+    <string name="condition_741">Туман</string>
+    <string name="condition_751">Пісок</string>
+    <string name="condition_761">Пилюка</string>
+    <string name="condition_762">Волканічний попіл</string>
+    <string name="condition_771">Шквали</string>
+    <string name="condition_781">Торнадо</string>
+    <string name="condition_800">Ясно</string>
+    <string name="condition_801">Переважно ясно</string>
+    <string name="condition_802">Невелика хмарність</string>
+    <string name="condition_803">Хмарно</string>
+    <string name="condition_804">Хмарність</string>
+    <string name="condition_900">Торнадо</string>
+    <string name="condition_901">Тропічний шторм</string>
+    <string name="condition_902">Ураган</string>
+    <string name="condition_903">Прохолодно</string>
+    <string name="condition_904">Спека</string>
+    <string name="condition_905">Вітряно</string>
+    <string name="condition_906">Град</string>
+    <string name="condition_951">Спокійно</string>
+    <string name="condition_952">Легкий бріз</string>
+    <string name="condition_953">Легкий бріз</string>
+    <string name="condition_954">Бріз</string> <!-- moderate breeze -->
+    <string name="condition_955">Свіжий бріз</string>
+    <string name="condition_956">Сильний бріз</string>
+    <string name="condition_957">Сильний вітер</string>
+    <string name="condition_958">Буря</string>
+    <string name="condition_959">Сильна буря</string>
+    <string name="condition_960">Шторм</string>
+    <string name="condition_961">Жорсткий шторм</string>
+    <string name="condition_962">Ураган</string>
+
+    <string name="condition_unknown">Невідомо (<xliff:g id="low">%1$s</xliff:g>)</string>
+
+    <string name="wind_dir_north">Пн.</string>
+    <string name="wind_dir_north_east">Пн. Сх.</string>
+    <string name="wind_dir_east">Сх.</string>
+    <string name="wind_dir_south_east">Пд. Сх.</string>
+    <string name="wind_dir_south">Пд.</string>
+    <string name="wind_dir_south_west">Пд. Зх.</string>
+    <string name="wind_dir_west">Зх.</string>
+    <string name="wind_dir_north_west">Пн. Зх.</string>
+
+</resources>

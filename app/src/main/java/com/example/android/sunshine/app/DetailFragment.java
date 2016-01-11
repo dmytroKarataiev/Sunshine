@@ -177,13 +177,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Log.v(LOG_TAG, "In onLoadFinished");
         if (!data.moveToFirst()) { return; }
 
+        int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
+
+
         // Description
-        String description = data.getString(COL_WEATHER_DESC);
+        String description = Utility.getStringForWeatherCondition(getActivity(), weatherId);;
         viewHolder.descriptionView.setText(description);
         viewHolder.descriptionView.setContentDescription(getString(R.string.a11y_forecast, description));
 
         // Use placeholder image for now
-        int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
         viewHolder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
         viewHolder.iconView.setContentDescription(getString(R.string.a11y_forecast_icon, description));
 

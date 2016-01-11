@@ -27,8 +27,11 @@ import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utility {
+
+    private static final String LOG_TAG = Utility.class.getSimpleName();
 
     // Format used for storing dates in the database.  ALso used for converting those strings
     // back into date objects for comparison/processing.
@@ -93,6 +96,7 @@ public class Utility {
         if (julianDay == currentJulianDay) {
             String today = context.getString(R.string.today);
             int formatId = R.string.format_full_friendly_date;
+
             return context.getString(
                     formatId,
                     today,
@@ -146,7 +150,14 @@ public class Utility {
     public static String getFormattedMonthDay(Context context, long dateInMillis ) {
         Time time = new Time();
         time.setToNow();
-        SimpleDateFormat monthDayFormat = new SimpleDateFormat("MMMM dd");
+
+        SimpleDateFormat monthDayFormat;
+        if (Locale.getDefault().toString().equals("uk_UA")) {
+            monthDayFormat = new SimpleDateFormat("dd MMMM");
+        } else {
+            monthDayFormat = new SimpleDateFormat("MMMM dd");
+        }
+
         return monthDayFormat.format(dateInMillis);
     }
 
@@ -159,7 +170,16 @@ public class Utility {
             windSpeed = .621371192237334f * windSpeed;
         }
 
-        final String[] directionsText = { "N", "NE", "E", "SE", "S", "SW", "W", "NW" };
+        final String[] directionsText = {
+                context.getString(R.string.wind_dir_north),
+                context.getString(R.string.wind_dir_north_east),
+                context.getString(R.string.wind_dir_east),
+                context.getString(R.string.wind_dir_south_east),
+                context.getString(R.string.wind_dir_south),
+                context.getString(R.string.wind_dir_south_west),
+                context.getString(R.string.wind_dir_west),
+                context.getString(R.string.wind_dir_north_west) };
+
         final int DEGREES_TOTAL = 360;
         final int DIR_TOTAL = 8;
 
