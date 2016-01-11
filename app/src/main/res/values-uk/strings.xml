@@ -164,4 +164,6 @@
         <item>https://raw.githubusercontent.com/udacity/sunshine_icons/master/Archive/Mono/art_%s.png</item>
     </string-array>
 
+    <string name="gcm_weather_alert">Увага: %1$s через %2$s!</string>
+
 </resources>
