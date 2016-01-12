@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/touch_selector"
-    android:elevation="8dp">
+    android:background="@drawable/touch_selector_white"
+    android:elevation="4dp">
 
     <android.support.v7.widget.GridLayout
         android:layout_width="match_parent"

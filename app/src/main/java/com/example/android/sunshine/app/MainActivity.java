@@ -45,8 +45,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
+            Log.v(LOG_TAG, "not null");
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-            getSupportActionBar().setElevation(10f);
+            getSupportActionBar().setElevation(0f);
         }
 
         if (findViewById(R.id.weather_detail_container) != null) {
