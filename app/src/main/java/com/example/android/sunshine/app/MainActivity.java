@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setElevation(10f);
         }
 
         if (findViewById(R.id.weather_detail_container) != null) {
@@ -63,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             }
         } else {
             mTwoPane = false;
-            //getSupportActionBar().setElevation(0f);
         }
 
         ForecastFragment forecastFragment = ((ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));

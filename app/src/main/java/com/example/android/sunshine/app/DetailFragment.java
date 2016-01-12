@@ -9,7 +9,9 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -70,7 +72,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static class ViewHolder {
 
         public final ImageView iconView;
-        public final TextView friendlyDateView;
         public final TextView dateView;
         public final TextView descriptionView;
         public final TextView highTempView;
@@ -81,7 +82,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         public ViewHolder(View view) {
             iconView = (ImageView) view.findViewById(R.id.detail_icon);
-            friendlyDateView = (TextView) view.findViewById(R.id.detail_day_textview);
             dateView = (TextView) view.findViewById(R.id.detail_date_textview);
             descriptionView = (TextView) view.findViewById(R.id.detail_forecast_textview);
             highTempView = (TextView) view.findViewById(R.id.detail_high_textview);
@@ -116,23 +116,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        inflater.inflate(R.menu.detail_fragment, menu);
-
-        // Retrieve the share menu item
-        MenuItem item = menu.findItem(R.id.share);
-
-        // Get the provider and hold onto it to set/change the share intent.
-        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-
-
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(weatherIntent());
-        }
-        else
-        {
-            Log.v(LOG_TAG, "fail");
+        if ( getActivity() instanceof DetailActivity ){
+            // Inflate the menu; this adds items to the action bar if it is present.
+            inflater.inflate(R.menu.detail_fragment, menu);
+            finishCreatingMenu(menu);
         }
     }
 
@@ -199,9 +186,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         // Nicely formatted date
         long date = data.getLong(COL_WEATHER_DATE);
-        String friendlyDateText = Utility.getDayName(getActivity(), date);
-        String dateText = Utility.getFormattedMonthDay(getActivity(), date);
-        viewHolder.friendlyDateView.setText(friendlyDateText);
+        String dateText = Utility.getFullFriendlyDayString(getActivity(), date);
         viewHolder.dateView.setText(dateText);
 
         // High temp + min temp
@@ -241,6 +226,28 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             mShareActionProvider.setShareIntent(weatherIntent());
         }
 
+        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        Toolbar toolbarView = (Toolbar) getView().findViewById(R.id.toolbar);
+
+        // We need to start the enter transition after the data has loaded
+        if (activity instanceof DetailActivity) {
+            activity.supportStartPostponedEnterTransition();
+
+            if ( null != toolbarView ) {
+                activity.setSupportActionBar(toolbarView);
+
+                activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+                activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        } else {
+            if ( null != toolbarView ) {
+                Menu menu = toolbarView.getMenu();
+                if ( null != menu ) menu.clear();
+                toolbarView.inflateMenu(R.menu.detail_fragment);
+                finishCreatingMenu(toolbarView.getMenu());
+            }
+        }
+
     }
 
     @Override
@@ -261,4 +268,33 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
     }
 
+    private void finishCreatingMenu(Menu menu) {
+
+        // Retrieve the share menu item
+        MenuItem item = menu.findItem(R.id.share);
+
+        // Get the provider and hold onto it to set/change the share intent.
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(weatherIntent());
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+
+            startActivity(new Intent(getActivity(), SettingsActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

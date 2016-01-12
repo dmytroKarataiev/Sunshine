@@ -1,128 +1,131 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Master layout. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingStart="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/white" />
+
+    <include
+        layout="@layout/detail_today_grid"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3" />
 
     <LinearLayout
+        android:id="@+id/detail_additional_pane"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@color/detail_accent_pane_background"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/abc_list_item_padding_horizontal_material"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/abc_list_item_padding_horizontal_material">
 
-        <!-- Header: Day, Date -->
-        <TextView
-            android:id="@+id/detail_day_textview"
+        <android.support.v7.widget.GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/detail_accent_pane_background"
+            android:paddingEnd="@dimen/abc_list_item_padding_horizontal_material"
+            android:paddingRight="@dimen/abc_list_item_padding_horizontal_material"
+            app:columnCount="2">
+
+            <android.support.v7.widget.Space
+                app:layout_columnSpan="2"
+                app:layout_rowWeight="1" />
+
+            <TextView
+                android:id="@+id/detail_humidity_label_textview"
+                android:layout_width="0dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/abc_list_item_padding_horizontal_material"
+                android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
+                android:paddingRight="@dimen/abc_list_item_padding_horizontal_material"
+                android:text="@string/humidity"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/detail_accent_label"
+                app:layout_columnWeight="1" />
+
+            <TextView
+                android:id="@+id/detail_humidity_textview"
+                android:layout_width="0dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@android:color/white"
+                app:layout_columnWeight="1"
+                tools:text="38%" />
+
+            <TextView
+                android:id="@+id/detail_pressure_label_textview"
+
+                android:layout_width="0dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/abc_list_item_padding_horizontal_material"
+                android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
+                android:paddingRight="@dimen/abc_list_item_padding_horizontal_material"
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:text="@string/pressure"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/detail_accent_label"
+                app:layout_columnWeight="1" />
+
+
+            <TextView
+                android:id="@+id/detail_pressure_textview"
+                android:layout_width="0dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@android:color/white"
+                app:layout_columnWeight="1"
+                tools:text="995 hPa" />
+
+            <TextView
+                android:id="@+id/detail_wind_label_textview"
+                android:layout_width="0dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/abc_list_item_padding_horizontal_material"
+                android:paddingRight="@dimen/abc_list_item_padding_horizontal_material"
+                android:paddingTop="@dimen/activity_horizontal_margin"
+                android:text="@string/wind"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/detail_accent_label"
+                app:layout_columnWeight="1" />
+
+            <TextView
+                android:id="@+id/detail_wind_textview"
+                android:layout_width="0dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@android:color/white"
+                app:layout_columnWeight="1"
+                tools:text="4km/h NW" />
+
+            <android.support.v7.widget.Space
+                app:layout_columnSpan="2"
+                app:layout_rowWeight="1" />
+
+        </android.support.v7.widget.GridLayout>
+
+        <ImageSwitcher
+            android:id="@+id/imageSwitcher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="TODAY"
-            android:textAppearance="?android:textAppearanceLarge"
-            android:textSize="@dimen/detail_day_big" />
-
-        <TextView
-            android:id="@+id/detail_date_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="June 24"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/detail_text"
-            android:textSize="@dimen/detail_day_small" />
-
-        <!-- Main content: high, low, art, weather state -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/detail_high_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="21°"
-                    android:textAppearance="?android:textAppearance"
-                    android:textSize="@dimen/detail_temp_big" />
-
-                <TextView
-                    android:id="@+id/detail_low_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"
-                    android:text="8°"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/detail_text"
-                    android:textSize="@dimen/detail_temp_small" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:id="@+id/detail_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true" />
-
-                <TextView
-                    android:id="@+id/detail_forecast_textview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="Clear"
-                    android:textAppearance="?android:textAppearanceSmall"
-                    android:textColor="@color/detail_text"
-                    android:textSize="@dimen/today_big" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- Humidity, wind, pressure -->
-        <TextView
-            android:id="@+id/detail_humidity_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:text="HUMIDITY"
-            android:textAppearance="?android:textAppearance"
-            android:textColor="@color/detail_text"
-            android:textSize="@dimen/today_big" />
-
-        <TextView
-            android:id="@+id/detail_wind_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:text="WIND"
-            android:textAppearance="?android:textAppearance"
-            android:textColor="@color/detail_text"
-            android:textSize="@dimen/today_big" />
-
-        <TextView
-            android:id="@+id/detail_pressure_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:text="PRESSURE"
-            android:textAppearance="?android:textAppearance"
-            android:textColor="@color/detail_text"
-            android:textSize="@dimen/today_big" />
-
+            android:layout_gravity="right" />
     </LinearLayout>
-
-</ScrollView>
+</LinearLayout>
