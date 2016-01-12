@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,6 +20,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -142,20 +144,25 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         Log.v(LOG_TAG, "In onCreateLoader");
 
-        if (mUri == null) {
-            return null;
+        if (mUri != null) {
+
+            // Now create and return a CursorLoader that will take care of
+            // creating a Cursor for the data being displayed.
+            return new CursorLoader(
+                    getActivity(),
+                    mUri,
+                    FORECAST_COLUMNS,
+                    null,
+                    null,
+                    null
+            );
         }
 
-        // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
-        return new CursorLoader(
-                getActivity(),
-                mUri,
-                FORECAST_COLUMNS,
-                null,
-                null,
-                null
-        );
+        ViewParent vp = getView().getParent();
+        if (vp instanceof CardView) {
+            ((View) vp).setVisibility(View.INVISIBLE);
+        }
+        return null;
 
     }
 
@@ -164,6 +171,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         Log.v(LOG_TAG, "In onLoadFinished");
         if (!data.moveToFirst()) { return; }
+
+        ViewParent vp = getView().getParent();
+
+        if (vp instanceof CardView) {
+            ((View) vp).setVisibility(View.VISIBLE);
+        }
 
         int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
 
