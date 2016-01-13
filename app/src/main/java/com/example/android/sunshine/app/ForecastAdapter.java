@@ -2,7 +2,7 @@ package com.example.android.sunshine.app;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.support.v4.widget.CursorAdapter;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,16 +10,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.android.sunshine.app.data.WeatherContract;
 
 /**
  * {@link ForecastAdapter} exposes a list of weather forecasts
  * from a {@link android.database.Cursor} to a {@link android.widget.ListView}.
  */
-public class ForecastAdapter extends CursorAdapter {
+public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHolder> {
 
-    public ForecastAdapter(Context context, Cursor c, int flags) {
-        super(context, c, flags);
+    public ForecastAdapter(Context context) {
+        mContext = context;
     }
+
+    private Context mContext;
+    private Cursor mCursor;
 
     private final String LOG_TAG = ForecastAdapter.class.getSimpleName();
 
@@ -28,10 +32,111 @@ public class ForecastAdapter extends CursorAdapter {
     private static final int VIEW_TYPE_COUNT = 2;
     private boolean mUseTodayLayout = true;
 
+    private static final String[] FORECAST_COLUMNS = {
+            // In this case the id needs to be fully qualified with a table name, since
+            // the content provider joins the location & weather tables in the background
+            // (both have an _id column)
+            // On the one hand, that's annoying.  On the other, you can search the weather table
+            // using the location set by the user, which is only in the Location table.
+            // So the convenience is worth it.
+            WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,
+            WeatherContract.WeatherEntry.COLUMN_DATE,
+            WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
+            WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
+            WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
+            WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING,
+            WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
+            WeatherContract.LocationEntry.COLUMN_COORD_LAT,
+            WeatherContract.LocationEntry.COLUMN_COORD_LONG
+    };
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (parent instanceof RecyclerView) {
+            int layoutId = -1;
+            switch (viewType) {
+                case VIEW_TYPE_TODAY:
+                    layoutId = R.layout.list_item_forecast_today;
+                    break;
+                case VIEW_TYPE_FUTURE_DAY:
+                    layoutId = R.layout.list_item_forecast;
+                    break;
+            }
+
+            View view = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+            view.setFocusable(true);
+            return new ViewHolder(view);
+        } else {
+            throw new RuntimeException("Not bound to RecyclerViewSelection");
+        }
+
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+
+        // our view is pretty simple here --- just a text view
+        // we'll keep the UI functional with a simple (and slow!) binding.
+        mCursor.moveToPosition(position);
+
+        // Read weather icon ID from cursor
+        int weatherId = mCursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
+        int defaultImage;
+
+        switch (getItemViewType(position)) {
+            case VIEW_TYPE_TODAY:
+                // Art image for today
+                defaultImage = Utility.getArtResourceForWeatherCondition(weatherId);
+                break;
+            default:
+                // Icon image for other days
+                defaultImage = Utility.getIconResourceForWeatherCondition(weatherId);
+                break;
+        }
+
+        Glide.with(mContext)
+                .load(Utility.getArtUrlForWeatherCondition(mContext, weatherId))
+                .error(defaultImage)
+                .crossFade()
+                .into(viewHolder.iconView);
+
+        // Description
+        String description = Utility.getStringForWeatherCondition(mContext, weatherId);
+        viewHolder.descriptionView.setText(description);
+        viewHolder.descriptionView.setContentDescription(mContext.getString(R.string.a11y_forecast, description));
+        viewHolder.iconView.setContentDescription(description);
+
+        // Nicely formatted date
+        viewHolder.dateView.setText(Utility.getFriendlyDayString(mContext, mCursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
+
+        // Metric or Imperial boolean value
+        boolean isMetric = Utility.isMetric(mContext);
+
+        // High temp +
+        double maxTemperature = mCursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
+        viewHolder.highTempView.setText(Utility.formatTemperature(mContext, maxTemperature, isMetric));
+        viewHolder.highTempView.setContentDescription(viewHolder.highTempView.getText());
+
+        double minTemperature = mCursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
+        viewHolder.lowTempView.setText(Utility.formatTemperature(mContext, minTemperature, isMetric));
+        viewHolder.lowTempView.setContentDescription(viewHolder.lowTempView.getText());
+
+    }
+
+    @Override
+    public int getItemCount() {
+
+        if (mCursor == null) {
+            return 0;
+        } else {
+            return mCursor.getCount();
+        }
+    }
+
     /**
      * Cache of the children views for a forecast list item.
      */
-    public static class ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public final ImageView iconView;
         public final TextView dateView;
         public final TextView descriptionView;
@@ -39,6 +144,7 @@ public class ForecastAdapter extends CursorAdapter {
         public final TextView lowTempView;
 
         public ViewHolder(View view) {
+            super(view);
             iconView = (ImageView) view.findViewById(R.id.list_item_icon);
             dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
             descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
@@ -56,86 +162,14 @@ public class ForecastAdapter extends CursorAdapter {
         mUseTodayLayout = useTodayLayout;
     }
 
-    @Override
-    public int getViewTypeCount() {
-        return VIEW_TYPE_COUNT;
+    public Cursor getCursor() {
+        return mCursor;
+    }
+
+    public void swapCursor(Cursor newCursor) {
+        mCursor = newCursor;
+        notifyDataSetChanged();
     }
 
 
-
-    @Override
-    public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        // Choose the layout type
-        int viewType = getItemViewType(cursor.getPosition());
-
-        int layoutId;
-
-        if (viewType == VIEW_TYPE_TODAY) {
-            layoutId = R.layout.list_item_forecast_today;
-        }
-        else {
-            layoutId = R.layout.list_item_forecast;
-        }
-
-
-        View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
-
-        ViewHolder viewHolder = new ViewHolder(view);
-        view.setTag(viewHolder);
-
-        return view;
-    }
-
-    /*
-        This is where we fill-in the views with the contents of the cursor.
-     */
-    @Override
-    public void bindView(View view, Context context, Cursor cursor) {
-        // our view is pretty simple here --- just a text view
-        // we'll keep the UI functional with a simple (and slow!) binding.
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
-
-        int viewType = getItemViewType(cursor.getPosition());
-        // Read weather icon ID from cursor
-        int weatherId = cursor.getInt(ForecastFragment.COL_WEATHER_CONDITION_ID);
-
-        int fallbackIconId;
-
-        if (viewType == VIEW_TYPE_TODAY) {
-            // Art image for today
-            fallbackIconId = Utility.getArtResourceForWeatherCondition(weatherId);
-        }
-        else {
-            // Icon image for other days
-            fallbackIconId = Utility.getIconResourceForWeatherCondition(weatherId);
-        }
-
-        Glide.with(mContext)
-                .load(Utility.getArtUrlForWeatherCondition(mContext, weatherId))
-                .error(fallbackIconId)
-                .crossFade()
-                .into(viewHolder.iconView);
-
-        // Description
-        String description = Utility.getStringForWeatherCondition(context, weatherId);
-        viewHolder.descriptionView.setText(description);
-        viewHolder.descriptionView.setContentDescription(context.getString(R.string.a11y_forecast, description));
-        viewHolder.iconView.setContentDescription(description);
-
-        // Nicely formatted date
-        viewHolder.dateView.setText(Utility.getFriendlyDayString(context, cursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
-
-        // Metric or Imperial boolean value
-        boolean isMetric = Utility.isMetric(mContext);
-
-        // High temp +
-        double maxTemperature = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
-        viewHolder.highTempView.setText(Utility.formatTemperature(context, maxTemperature, isMetric));
-        viewHolder.highTempView.setContentDescription(viewHolder.highTempView.getText());
-
-        double minTemperature = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
-        viewHolder.lowTempView.setText(Utility.formatTemperature(context, minTemperature, isMetric));
-        viewHolder.lowTempView.setContentDescription(viewHolder.lowTempView.getText());
-
-    }
 }
