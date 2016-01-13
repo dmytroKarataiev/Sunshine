@@ -149,9 +149,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        // Adapter to populate RecyclerView
-        forecastAdapter = new ForecastAdapter(getActivity());
-
         // Main layout for the view
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -161,33 +158,27 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // Layout manager which sets the "design" of the View
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(recyclerView.getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        View emptyView = rootView.findViewById(R.id.listview_forecast_empty);
+
+        recyclerView.setHasFixedSize(true);
+
+        // Adapter to populate RecyclerView
+        forecastAdapter = new ForecastAdapter(getActivity(), new ForecastAdapter.ForecastAdapterOnClickHandler() {
+            @Override
+            public void onClick(Long date, ForecastAdapter.ViewHolder vh) {
+                String locationSetting = Utility.getPreferredLocation(getActivity());
+                ((Callback) getActivity()).onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, date)
+                );
+                mPosition = vh.getAdapterPosition();
+            }
+        }, emptyView);
+
         recyclerView.setAdapter(forecastAdapter);
-
-        //View emptyView = rootView.findViewById(R.id.listview_forecast_empty);
-        //recyclerView.setEmptyView(emptyView);
-
-
-//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView adapterView, View view, int position, long l) {
-//                // CursorAdapter returns a cursor at the correct position for getItem(), or null
-//                // if it cannot seek to that position.
-//                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-//                if (cursor != null) {
-//                    String locationSetting = Utility.getPreferredLocation(getActivity());
-//                    ((Callback) getActivity())
-//                            .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationSetting, cursor.getLong(COL_WEATHER_DATE)));
-//                }
-//                mPosition = position;
-//            }
-//        });
-
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_POSITION)) {
             mPosition = savedInstanceState.getInt(SELECTED_POSITION);
         }
-
-        //updateWeather();
 
         forecastAdapter.setUseTodayLayout(mUseTodayLayout);
 

@@ -18,12 +18,16 @@ import com.example.android.sunshine.app.data.WeatherContract;
  */
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHolder> {
 
-    public ForecastAdapter(Context context) {
+    public ForecastAdapter(Context context, ForecastAdapterOnClickHandler dh, View emptyView) {
         mContext = context;
+        mClickHandler = dh;
+        mEptyView = emptyView;
     }
 
     private Context mContext;
     private Cursor mCursor;
+    private ForecastAdapterOnClickHandler mClickHandler;
+    private View mEptyView;
 
     private final String LOG_TAG = ForecastAdapter.class.getSimpleName();
 
@@ -67,7 +71,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
             view.setFocusable(true);
             return new ViewHolder(view);
         } else {
-            throw new RuntimeException("Not bound to RecyclerViewSelection");
+            throw new RuntimeException("Not bound to RecyclerView");
         }
 
     }
@@ -136,7 +140,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     /**
      * Cache of the children views for a forecast list item.
      */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final ImageView iconView;
         public final TextView dateView;
         public final TextView descriptionView;
@@ -150,7 +154,20 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
             descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
             highTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
             lowTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
+            view.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+            int dateColumnIndex = mCursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE);
+            mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);
+        }
+    }
+
+    public static interface ForecastAdapterOnClickHandler {
+        void onClick(Long date, ViewHolder vh);
     }
 
     @Override
@@ -169,6 +186,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     public void swapCursor(Cursor newCursor) {
         mCursor = newCursor;
         notifyDataSetChanged();
+        mEptyView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 
 
