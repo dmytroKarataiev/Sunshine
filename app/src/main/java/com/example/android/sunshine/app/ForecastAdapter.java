@@ -2,6 +2,7 @@ package com.example.android.sunshine.app;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,16 +19,21 @@ import com.example.android.sunshine.app.data.WeatherContract;
  */
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHolder> {
 
-    public ForecastAdapter(Context context, ForecastAdapterOnClickHandler dh, View emptyView) {
+    public ForecastAdapter(Context context, ForecastAdapterOnClickHandler dh, View emptyView, int choiceMode) {
         mContext = context;
         mClickHandler = dh;
         mEptyView = emptyView;
+        mICM = new ItemChoiceManager(this);
+        mICM.setChoiceMode(choiceMode);
     }
 
     private Context mContext;
     private Cursor mCursor;
     private ForecastAdapterOnClickHandler mClickHandler;
     private View mEptyView;
+
+    // ItemChoiceManager to save position on rotation
+    private ItemChoiceManager mICM;
 
     private final String LOG_TAG = ForecastAdapter.class.getSimpleName();
 
@@ -125,6 +131,26 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         viewHolder.lowTempView.setText(Utility.formatTemperature(mContext, minTemperature, isMetric));
         viewHolder.lowTempView.setContentDescription(viewHolder.lowTempView.getText());
 
+        mICM.onBindViewHolder(viewHolder, position);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        mICM.onRestoreInstanceState(savedInstanceState);
+    }
+
+    public void onSaveInstanceState(Bundle outState) {
+        mICM.onSaveInstanceState(outState);
+    }
+
+    public int getSelectedItemPosition() {
+        return mICM.getSelectedItemPosition();
+    }
+
+    public void selectView(RecyclerView.ViewHolder viewHolder) {
+        if ( viewHolder instanceof ViewHolder ) {
+            ViewHolder vfh = (ViewHolder)viewHolder;
+            vfh.onClick(vfh.itemView);
+        }
     }
 
     @Override
@@ -163,6 +189,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
             mCursor.moveToPosition(adapterPosition);
             int dateColumnIndex = mCursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE);
             mClickHandler.onClick(mCursor.getLong(dateColumnIndex), this);
+            mICM.onClick(this);
         }
     }
 
