@@ -4,6 +4,7 @@
 # built application files
 *.apk
 *.ap_
+api_key.xml
 
 # files for the dex VM
 *.dex
@@ -42,3 +43,4 @@ gradle.properties
 ##Gradle-based build
 .gradle
 build/
+
