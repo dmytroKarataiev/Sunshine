@@ -1,34 +1,34 @@
-Sunshine
+Sunshine v2.0
 ========
 
-This is the learning program written following an excellent Udacity course [Developing Android Apps: Android Fundamentals](https://www.udacity.com/course/ud853). 
+This is the learning program written following an excellent Udacity course: [Developing Android Apps: Android Fundamentals](https://www.udacity.com/course/ud853)  and all the improvements from course [Advanced Android App Development](https://www.udacity.com/course/ud855-nd).
 
-## Learned from developing the program
-* Android Studio, Gradle, and debugging tools
-* User Interface and Layout managers
-* ListViews and Adapters
-* Threading and ASyncTask
-* HTTP requests on web APIs
-* Android Permission System
-* App navigation with Explicit Intents
-* Implicit Intents to incorporate 3rd-party apps
-* Share Intent and the Android sharing framework
+## Most important things learned
+* RecyclerView, onClick implementation, LayoutManager
+* Threading and ASyncTask, JSON parsing
+* Intents, PlacePickerIntent (Google PlacePicker API)
 * Broadcast Intents and Broadcast Receivers
-* Activity lifecycle and background activity termination
-* SQLite databases and JUnit tests
-* Creating and using a Content Provider as an abstraction layer
-* Using Loaders to asynchronously load data
-* Creating Adapters to bind UI components to Content Providers
-* Fundamental Android design principles
-* Supporting localization and variable screen sizes
-* Optimizing tablet UIs using Fragments
-* Accessibility Features
-* Custom views
-* Background services and alarms to schedule background tasks
-* Efficient background data transfers with SyncAdapters
-* Rich notifications to interact with users
+* Content Provider, SQLite databases and JUnit tests
+* Supporting localization and variable screen sizes (Ukrainian language, tablet design)
+* Accessibility Features, Custom views (EditText)
+* Background services, SyncAdapters
+* Notification
+
+## Further Improvements from Advanced Android App Development course
+* Google Cloud Messaging
+* Material Design, Shared Transitions, Animations, Parallax Scroll
+* Error handling
 
 ## Important
-For the application to work you need to get openweather API key and put it into the gradle.properties file. 
+For the application to work you need to get openweather API key and Google Maps API key 
 
-Key you can get from here: <http://openweathermap.org/>
+OpenWeatherMap Key you can get from here: <http://openweathermap.org/>
+
+Google Maps Key (PlacePicker): <https://developers.google.com/places/android-api/placepicker>
+
+OpenWeather key you should add to the gradle.properties file. 
+
+Google Maps API key should be added to the api_key.xml in values folder as a string with name: youtube_api_key
+
+
+
