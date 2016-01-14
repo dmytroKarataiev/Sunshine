@@ -23,9 +23,14 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
 /**
+ * Custom EditText View with less than 3 characters check and
+ * ImageView for a PlacePicker
+ * 
  * Created by karataev on 1/9/16.
  */
 public class LocationEditTextPreference extends EditTextPreference {
+
+    private final String LOG_TAG = LocationEditTextPreference.class.getSimpleName();
 
     static final private int DEFAULT_MINIMUM_LOCATION_LENGTH = 2;
     private int mMinLength;
@@ -68,9 +73,12 @@ public class LocationEditTextPreference extends EditTextPreference {
                 Activity settingsActivity = (SettingsActivity) context;
 
                 try {
-                    settingsActivity.startActivityForResult(builder.build(settingsActivity), SettingsActivity.PLACE_PICKER_REQUEST);
-                } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-                    Log.e("Err", "err " + e);
+                    settingsActivity.startActivityForResult(
+                            builder.build(settingsActivity),
+                            SettingsActivity.PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException
+                        | GooglePlayServicesNotAvailableException e) {
+                    Log.e(LOG_TAG, "PlacePicker Error " + e);
                 }
             }
         });
@@ -85,14 +93,10 @@ public class LocationEditTextPreference extends EditTextPreference {
         EditText editText = getEditText();
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -109,8 +113,5 @@ public class LocationEditTextPreference extends EditTextPreference {
                 }
             }
         });
-
-
-
     }
 }

@@ -119,7 +119,7 @@ public class SettingsActivity extends PreferenceActivity
     // start our synchronization here
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if ( key.equals(getString(R.string.pref_location_key)) ) {
+        if (key.equals(getString(R.string.pref_location_key)) ) {
             // we've changed the location
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.remove(getString(R.string.pref_location_latitude));
