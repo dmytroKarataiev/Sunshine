@@ -9,7 +9,10 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
@@ -29,6 +32,7 @@ public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
     protected final static int PLACE_PICKER_REQUEST = 9090;
+    private ImageView mAttribution;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,18 @@ public class SettingsActivity extends PreferenceActivity
         // updated when the preference changes.
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_img_key)));
+
+        // If we are using a PlacePicker location, we need to show attributions.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            mAttribution = new ImageView(this);
+            mAttribution.setImageResource(R.drawable.powered_by_google_light);
+
+            if (!Utility.isLocationLatLonAvailable(this)) {
+                mAttribution.setVisibility(View.GONE);
+            }
+
+            setListFooter(mAttribution);
+        }
     }
 
     /**
@@ -110,6 +126,11 @@ public class SettingsActivity extends PreferenceActivity
             editor.remove(getString(R.string.pref_location_longitude));
             editor.commit();
 
+            // remove attributions
+            if (mAttribution != null) {
+                mAttribution.setVisibility(View.GONE);
+            }
+
             // first clear locationStatus
             Utility.setUnknownLocation(this);
             SunshineSyncAdapter.syncImmediately(this);
@@ -165,6 +186,15 @@ public class SettingsActivity extends PreferenceActivity
 
                 Preference locationPreference = findPreference(getString(R.string.pref_location_key));
                 setPreferenceSummary(locationPreference, address);
+
+                // Add attributions
+                if (mAttribution != null) {
+                    mAttribution.setVisibility(View.VISIBLE);
+                } else {
+                    View rootView = findViewById(android.R.id.content);
+                    Snackbar.make(rootView, getString(R.string.attribution_text), Snackbar.LENGTH_LONG).show();
+                }
+
                 Utility.setUnknownLocation(this);
                 SunshineSyncAdapter.syncImmediately(this);
             }
