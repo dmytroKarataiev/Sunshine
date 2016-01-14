@@ -3,6 +3,7 @@ package com.example.android.sunshine.app;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,6 +110,9 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
                 .error(defaultImage)
                 .crossFade()
                 .into(viewHolder.iconView);
+
+        // better animation even after rotation of a device to find a view
+        ViewCompat.setTransitionName(viewHolder.iconView, "iconView" + position);
 
         // Description
         String description = Utility.getStringForWeatherCondition(mContext, weatherId);
