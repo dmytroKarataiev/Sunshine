@@ -159,5 +159,11 @@
 
     <!-- Will be fixed in new release -->
     <string name="google_app_id">1:128292862738:android:83b792e26f07bf18</string>
+    <string name="humidity">Вологість</string>
+    <string name="pref_current_location_desc">Моя локація</string>
+    <string name="pressure">Тиск</string>
+    <string name="title_widget_detail">Сонечко Деталі</string>
+    <string name="widget_title">Сонечко Віджет</string>
+    <string name="wind">Вітер</string>
 
 </resources>

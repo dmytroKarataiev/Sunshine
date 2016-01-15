@@ -188,13 +188,13 @@
     <string name="pref_location_longitude" translatable="false">loc-longitude</string>
 
     <!-- For Google Places API Attributions -->
-    <string name="attribution_text">Powered by Google</string>
+    <string name="attribution_text" translatable="false">Powered by Google</string>
 
     <!-- Widget Strings -->
     <string name="widget_title">Sunshine Widget</string>
     <string name="title_widget_detail">Sunshine Details</string>
 
     <!-- Strings related to Muzei Source -->
-    <string name="muzei_description">Today\'s weather</string>
+    <string name="muzei_description" translatable="false">Today\'s weather</string>
 
 </resources>
