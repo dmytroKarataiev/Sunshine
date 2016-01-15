@@ -35,6 +35,7 @@ import com.example.android.sunshine.app.MainActivity;
 import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
+import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -187,6 +188,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
             // Send a broadcast intent to the widgets
             updateWidgets();
+
+            // update wallpaper
+            updateMuzei();
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
@@ -629,6 +633,16 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 // Ensures that only components in the app will receive the broadcast
                 .setPackage(getContext().getPackageName());
         getContext().sendBroadcast(dataUpdated);
+    }
+
+    private void updateMuzei() {
+        // Muzei is only compatible with Jelly Bean MR1+ devices, so there's no need to update the
+        // Muzei background on lower API level devices
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            Context context = getContext();
+            context.startService(new Intent(ACTION_DATA_UPDATE)
+                    .setClass(context, WeatherMuzeiSource.class));
+        }
     }
 
 }
