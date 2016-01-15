@@ -19,6 +19,7 @@ This is the learning program written following an excellent Udacity course: [Dev
 * Material Design, Shared Transitions, Animations, Parallax Scroll
 * Error handling
 * Widget ([ce229c](https://github.com/dmytroKarataiev/Sunshine/commit/ce229c652e80eb025337ac248498ec43d2467446))
+* Musei API ([Dynamic Wallpapers](https://github.com/romannurik/muzei/)) ([7dc8b5](https://github.com/dmytroKarataiev/Sunshine/commit/7dc8b5d2c077d5fdc742555c93b91aa867bce476))
 
 ## Important (API Keys)
 You need OpenWeather and Google Maps API keys: 
