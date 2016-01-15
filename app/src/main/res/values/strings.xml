@@ -190,4 +190,7 @@
     <!-- For Google Places API Attributions -->
     <string name="attribution_text">Powered by Google</string>
 
+    <!-- Widget Strings -->
+    <string name="widget_title">Sunshine Widget</string>
+
 </resources>

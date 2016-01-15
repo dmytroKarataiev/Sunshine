@@ -123,7 +123,8 @@
         </service>
 
         <!-- Widget declaration -->
-        <receiver android:name=".TodayWidgetProvider" >
+        <receiver android:name=".TodayWidgetProvider"
+            android:label="@string/widget_title" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
