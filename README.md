@@ -3,7 +3,7 @@ Sunshine v2.0
 
 This is the learning program written following an excellent Udacity course: [Developing Android Apps: Android Fundamentals](https://www.udacity.com/course/ud853)  and all the improvements from course [Advanced Android App Development](https://www.udacity.com/course/ud855-nd).
 
-## Most important things learned
+## Fundamentals
 * RecyclerView, onClick implementation, LayoutManager
 * Threading and ASyncTask, JSON parsing
 * Intents, PlacePickerIntent (Google PlacePicker API)
@@ -14,19 +14,19 @@ This is the learning program written following an excellent Udacity course: [Dev
 * Background services, SyncAdapters
 * Notification
 
-## Further Improvements from Advanced Android App Development course
+## Advanced topics
 * Google Cloud Messaging
 * Material Design, Shared Transitions, Animations, Parallax Scroll
 * Error handling
+* Widget ([ce229c](https://github.com/dmytroKarataiev/Sunshine/commit/ce229c652e80eb025337ac248498ec43d2467446))
 
-## Important
-For the application to work you need to get openweather API key and Google Maps API key 
+## Important (API Keys)
+You need OpenWeather and Google Maps API keys: 
+* OpenWeatherMap Key: <http://openweathermap.org/>
+* Google Maps Key (PlacePicker): <https://developers.google.com/places/android-api/placepicker>
 
-OpenWeatherMap Key you can get from here: <http://openweathermap.org/>
-
-Google Maps Key (PlacePicker): <https://developers.google.com/places/android-api/placepicker>
-
-OpenWeather key you should add to the gradle.properties file. 
+OpenWeather key you should add to the gradle.properties file:</br>
+MyOpenWeatherMapApiKey = "**YOUR API KEY**"
 
 Google Maps API key should be added to the api_key.xml in values folder as a string with name: youtube_api_key
 
