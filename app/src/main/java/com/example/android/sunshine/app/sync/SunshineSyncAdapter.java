@@ -55,6 +55,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
 
+    // Broadcast message to the widget
+    public static final String ACTION_DATA_UPDATE = "com.example.android.sunshine.app.ACTION_DATA_UPDATED";
+
     // Interval at which to sync with the weather, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
     public static final int SYNC_INTERVAL = 60 * 180;
@@ -181,6 +184,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             forecastJsonStr = buffer.toString();
 
             getWeatherDataFromJson(forecastJsonStr, params);
+
+            // Send a broadcast intent to the widgets
+            updateWidgets();
 
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error ", e);
@@ -611,6 +617,18 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     private void setLocationStatus(@LocationStatus int locationStatus) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         sharedPreferences.edit().putInt(getContext().getString(R.string.pref_location_status_key), locationStatus).apply();
+    }
+
+    /**
+     *
+     */
+    public void updateWidgets() {
+
+        // Send intent to the Widget to notify that the data was updated
+        Intent dataUpdated = new Intent(ACTION_DATA_UPDATE)
+                // Ensures that only components in the app will receive the broadcast
+                .setPackage(getContext().getPackageName());
+        getContext().sendBroadcast(dataUpdated);
     }
 
 }
