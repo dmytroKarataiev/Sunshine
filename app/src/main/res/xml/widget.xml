@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minWidth="40dp"
-    android:minHeight="40dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:minWidth="@dimen/widget_today_default_width"
+    android:minHeight="@dimen/widget_today_default_height"
+    android:minResizeHeight="@dimen/widget_today_min_resize_height"
+    android:minResizeWidth="@dimen/widget_today_min_resize_width"
+    android:previewImage="@drawable/widget_preview_today"
     android:updatePeriodMillis="0"
-    android:initialLayout="@layout/weather_appwidget"
-    android:widgetCategory="home_screen">
-
-</appwidget-provider>
+    android:initialLayout="@layout/weather_appwidget_medium"
+    android:resizeMode="horizontal"
+    android:widgetCategory="home_screen"
+    tools:ignote="UnusedAttribute" />
