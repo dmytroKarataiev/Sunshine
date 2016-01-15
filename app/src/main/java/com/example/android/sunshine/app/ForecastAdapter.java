@@ -42,6 +42,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
     private static final int VIEW_TYPE_FUTURE_DAY = 1;
     private static final int VIEW_TYPE_COUNT = 2;
     private boolean mUseTodayLayout = true;
+    boolean useLongToday;
 
     private static final String[] FORECAST_COLUMNS = {
             // In this case the id needs to be fully qualified with a table name, since
@@ -68,9 +69,11 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
             switch (viewType) {
                 case VIEW_TYPE_TODAY:
                     layoutId = R.layout.list_item_forecast_today;
+                    useLongToday = true;
                     break;
                 case VIEW_TYPE_FUTURE_DAY:
                     layoutId = R.layout.list_item_forecast;
+                    useLongToday = false;
                     break;
             }
 
@@ -121,7 +124,7 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
         viewHolder.iconView.setContentDescription(description);
 
         // Nicely formatted date
-        viewHolder.dateView.setText(Utility.getFriendlyDayString(mContext, mCursor.getLong(ForecastFragment.COL_WEATHER_DATE)));
+        viewHolder.dateView.setText(Utility.getFriendlyDayString(mContext, mCursor.getLong(ForecastFragment.COL_WEATHER_DATE), useLongToday));
 
         // Metric or Imperial boolean value
         boolean isMetric = Utility.isMetric(mContext);

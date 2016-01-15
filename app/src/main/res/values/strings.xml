@@ -192,5 +192,6 @@
 
     <!-- Widget Strings -->
     <string name="widget_title">Sunshine Widget</string>
+    <string name="title_widget_detail">Sunshine Details</string>
 
 </resources>
