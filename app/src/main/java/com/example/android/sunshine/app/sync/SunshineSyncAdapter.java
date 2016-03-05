@@ -590,7 +590,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                             .setSmallIcon(iconId)
                             .setLargeIcon(largeIcon)
                             .setContentTitle(title)
-                            .setContentText(contentText);
+                            .setContentText(contentText)
+                            .setAutoCancel(true);
 
                     // Intent ti open the app
                     Intent intent = new Intent(getContext(), MainActivity.class);
