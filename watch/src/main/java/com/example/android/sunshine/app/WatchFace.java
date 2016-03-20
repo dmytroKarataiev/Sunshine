@@ -33,13 +33,20 @@ import android.os.Message;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 
+import com.google.android.gms.wearable.DataMap;
+import com.patloew.rxwear.RxWear;
+import com.patloew.rxwear.transformers.MessageEventGetDataMap;
+
 import java.lang.ref.WeakReference;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import rx.functions.Action1;
 
 /**
  * Digital watch face with seconds. In ambient mode, the seconds aren't displayed. On devices with
@@ -65,6 +72,7 @@ public class WatchFace extends CanvasWatchFaceService {
 
     @Override
     public Engine onCreateEngine() {
+        RxWear.init(this);
         return new Engine();
     }
 
@@ -137,8 +145,15 @@ public class WatchFace extends CanvasWatchFaceService {
             // TODO: Make a layout and bind views. Butterknife
             // Inflate layout for later use
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-
+            if (BuildConfig.DEBUG) Log.d("Engine", "test ");
+            RxWear.Message.listen()
+                    .compose(MessageEventGetDataMap.filterByPath("/sunshine-weather-data"))
+                    .subscribe(new Action1<DataMap>() {
+                        @Override
+                        public void call(DataMap dataMap) {
+                            Log.d("WATCH", "call: " + dataMap.getInt("weather-high") + ", " + dataMap.getInt("weather-id"));
+                        }
+                    });
         }
 
         @Override

@@ -28,6 +28,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.format.Time;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.android.sunshine.app.BuildConfig;
@@ -36,13 +37,8 @@ import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.Wearable;
+import com.patloew.rxwear.RxWear;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,6 +54,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
+
+import rx.functions.Action1;
 
 public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
@@ -102,31 +100,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
-        // API client to connect to a watch TODO: refactor
-        mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-                    @Override
-                    public void onConnected(Bundle connectionHint) {
-                        Log.d(LOG_TAG, "onConnected: " + connectionHint);
-                        // Now you can use the Data Layer API
+        RxWear.init(context);
 
-                    }
-                    @Override
-                    public void onConnectionSuspended(int cause) {
-                        Log.d(LOG_TAG, "onConnectionSuspended: " + cause);
-                    }
-                })
-                .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(ConnectionResult result) {
-                        Log.d(LOG_TAG, "onConnectionFailed: " + result);
-                    }
-                })
-                        // Request access only to the Wearable API
-                .addApi(Wearable.API)
-                .build();
-
-        mGoogleApiClient.connect();
     }
 
     @Override
@@ -448,24 +423,20 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 if (i == 0) {
 
+                    Log.d(LOG_TAG, "getWeatherDataFromJson: 333");
                     // TODO: FIX
-                    // Populate message with data and send to a watch
-                    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/sunshine-weather-data");
-                    putDataMapRequest.getDataMap().putInt("weather-high",(int)high);
-                    putDataMapRequest.getDataMap().putInt("weather-low",(int)low);
-                    putDataMapRequest.getDataMap().putInt("weather-id", weatherId);
+                    RxWear.Message.SendDataMap.toAllRemoteNodes("/sunshine-weather-data")
+                            .putInt("weather-high", (int) high)
+                            .putInt("weather-low", (int) low)
+                            .putInt("weather-id", weatherId)
+                            .toObservable()
+                            .subscribe(new Action1<Integer>() {
+                                @Override
+                                public void call(Integer integer) {
+                                    Toast.makeText(getContext(), "test", Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
-                    PutDataRequest request = putDataMapRequest.asPutDataRequest();
-                    Wearable.DataApi.putDataItem(mGoogleApiClient, request).setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
-                        @Override
-                        public void onResult(DataApi.DataItemResult dataItemResult) {
-                            if (dataItemResult.getStatus().isSuccess()) {
-                                Log.i("SUNSHINE", "Successfully sent to wearable");
-                            } else {
-                                Log.i("SUNSHINE", "Couldn't  send to wearable");
-                            }
-                        }
-                    });
                 }
 
             }
