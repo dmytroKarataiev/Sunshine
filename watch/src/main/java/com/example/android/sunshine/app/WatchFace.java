@@ -26,12 +26,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.WindowInsets;
 
@@ -57,6 +59,9 @@ public class WatchFace extends CanvasWatchFaceService {
      * Handler message id for updating the time periodically in interactive mode.
      */
     private static final int MSG_UPDATE_TIME = 0;
+
+
+
 
     @Override
     public Engine onCreateEngine() {
@@ -128,6 +133,12 @@ public class WatchFace extends CanvasWatchFaceService {
             mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
 
             mTime = new Time();
+
+            // TODO: Make a layout and bind views. Butterknife
+            // Inflate layout for later use
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
         }
 
         @Override
@@ -295,5 +306,16 @@ public class WatchFace extends CanvasWatchFaceService {
                 mUpdateTimeHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, delayMs);
             }
         }
+
+        private class LoadWeather extends AsyncTask<Void, Void, Void> {
+            @Override
+            protected Void doInBackground(Void... params) {
+
+
+
+                return null;
+            }
+        }
+
     }
 }
