@@ -206,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
                     .commit();
-
         }
     }
 
@@ -228,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             if (apiAvailability.isUserResolvableError(resultCode)) {
                 apiAvailability.getErrorDialog(this, resultCode,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
-
             } else {
                 Log.i(LOG_TAG, "This device is not supported.");
                 finish();

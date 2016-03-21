@@ -14,6 +14,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.android.sunshine.app.data.WeatherContract;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * {@link ForecastAdapter} exposes a list of weather forecasts
  * from a {@link android.database.Cursor} to a {@link android.widget.ListView}.
@@ -174,19 +177,16 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ViewHo
      * Cache of the children views for a forecast list item.
      */
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public final ImageView iconView;
-        public final TextView dateView;
-        public final TextView descriptionView;
-        public final TextView highTempView;
-        public final TextView lowTempView;
+
+        @Bind(R.id.list_item_icon) ImageView iconView;
+        @Bind(R.id.list_item_date_textview) TextView dateView;
+        @Bind(R.id.list_item_forecast_textview) TextView descriptionView;
+        @Bind(R.id.list_item_high_textview) TextView highTempView;
+        @Bind(R.id.list_item_low_textview) TextView lowTempView;
 
         public ViewHolder(View view) {
             super(view);
-            iconView = (ImageView) view.findViewById(R.id.list_item_icon);
-            dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
-            descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
-            highTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
-            lowTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
+            ButterKnife.bind(this, view);
             view.setOnClickListener(this);
         }
 

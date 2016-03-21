@@ -52,6 +52,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import rx.functions.Action1;
 
 /**
@@ -97,17 +99,26 @@ public class WatchFace extends CanvasWatchFaceService {
         }
     }
 
-    private class Engine extends CanvasWatchFaceService.Engine {
+    class Engine extends CanvasWatchFaceService.Engine {
 
         final int BACKGROUND_COLOR_AMBIENT = Color.BLACK;
         final int BACKGROUND_COLOR = getColor(R.color.primary);
+
         String mHigh_temp = "", mLow_temp = "", mDate = "", mWeatherDesc = "";
         int mWeather_id = -1;
 
         private int specW, specH;
-        private View mLayout, face_divider;
-        private TextView face_time, face_date, face_high_temp, face_low_temp, face_weather_desc;
-        private ImageView face_weather_image;
+
+        private View mLayout;
+
+        @Bind(R.id.current_date) TextView face_date;
+        @Bind(R.id.current_time) TextView face_time;
+        @Bind(R.id.high_temp) TextView face_high_temp;
+        @Bind(R.id.low_temp) TextView face_low_temp;
+        @Bind(R.id.weather_desc) TextView face_weather_desc;
+        @Bind(R.id.weather_id) ImageView face_weather_image;
+        @Bind(R.id.divider) View face_divider;
+
         private final Point displaySize = new Point();
 
         final Handler mUpdateTimeHandler = new EngineHandler(this);
@@ -140,20 +151,13 @@ public class WatchFace extends CanvasWatchFaceService {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mLayout = inflater.inflate(R.layout.weather_face, null);
 
+            ButterKnife.bind(this, mLayout);
+
             Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
             display.getSize(displaySize);
 
             specW = View.MeasureSpec.makeMeasureSpec(displaySize.x, View.MeasureSpec.EXACTLY);
             specH = View.MeasureSpec.makeMeasureSpec(displaySize.y, View.MeasureSpec.EXACTLY);
-
-            // Find all the views from the layout
-            face_time = (TextView) mLayout.findViewById(R.id.current_time);
-            face_date = (TextView) mLayout.findViewById(R.id.current_date);
-            face_high_temp = (TextView) mLayout.findViewById(R.id.high_temp);
-            face_low_temp = (TextView) mLayout.findViewById(R.id.low_temp);
-            face_weather_image = (ImageView) mLayout.findViewById(R.id.weather_id);
-            face_weather_desc = (TextView) mLayout.findViewById(R.id.weather_desc);
-            face_divider = mLayout.findViewById(R.id.divider);
 
             setWatchFaceStyle(new WatchFaceStyle.Builder(WatchFace.this)
                     .setCardPeekMode(WatchFaceStyle.PEEK_MODE_VARIABLE)

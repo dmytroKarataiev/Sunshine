@@ -27,6 +27,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.android.sunshine.app.data.WeatherContract;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -77,24 +80,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
      */
     public static class ViewHolder {
 
-        public final ImageView iconView;
-        public final TextView dateView;
-        public final TextView descriptionView;
-        public final TextView highTempView;
-        public final TextView lowTempView;
-        public final TextView humidityView;
-        public final TextView windView;
-        public final TextView pressureView;
+        @Bind(R.id.detail_icon) ImageView iconView;
+        @Bind(R.id.detail_date_textview) TextView dateView;
+        @Bind(R.id.detail_forecast_textview) TextView descriptionView;
+        @Bind(R.id.detail_high_textview) TextView highTempView;
+        @Bind(R.id.detail_low_textview) TextView lowTempView;
+        @Bind(R.id.detail_humidity_textview) TextView humidityView;
+        @Bind(R.id.detail_wind_textview) TextView windView;
+        @Bind(R.id.detail_pressure_textview) TextView pressureView;
 
         public ViewHolder(View view) {
-            iconView = (ImageView) view.findViewById(R.id.detail_icon);
-            dateView = (TextView) view.findViewById(R.id.detail_date_textview);
-            descriptionView = (TextView) view.findViewById(R.id.detail_forecast_textview);
-            highTempView = (TextView) view.findViewById(R.id.detail_high_textview);
-            lowTempView = (TextView) view.findViewById(R.id.detail_low_textview);
-            humidityView = (TextView) view.findViewById(R.id.detail_humidity_textview);
-            windView = (TextView) view.findViewById(R.id.detail_wind_textview);
-            pressureView = (TextView) view.findViewById(R.id.detail_pressure_textview);
+            ButterKnife.bind(this, view);
         }
     }
 
@@ -117,8 +113,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         viewHolder = new ViewHolder(rootView);
 
         return rootView;
-
-
     }
 
     @Override
@@ -265,7 +259,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 finishCreatingMenu(toolbarView.getMenu());
             }
         }
-
     }
 
     @Override
@@ -308,7 +301,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-
             startActivity(new Intent(getActivity(), SettingsActivity.class));
             return true;
         }
