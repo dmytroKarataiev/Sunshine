@@ -423,20 +423,20 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 if (i == 0) {
 
-                    Log.d(LOG_TAG, "getWeatherDataFromJson: 333");
-                    // TODO: FIX
+                    // Send messages to all connected watches
                     RxWear.Message.SendDataMap.toAllRemoteNodes("/sunshine-weather-data")
-                            .putInt("weather-high", (int) high)
-                            .putInt("weather-low", (int) low)
+                            .putString("weather-high", Utility.formatTemperature(getContext(), high, Utility.isMetric(getContext())))
+                            .putString("weather-low", Utility.formatTemperature(getContext(), low, Utility.isMetric(getContext())))
                             .putInt("weather-id", weatherId)
+                            .putString("weather-date", Utility.getFriendlyDayString(getContext(), dateTime, true))
+                            .putString("weather-desc", Utility.getStringForWeatherCondition(getContext(), weatherId))
                             .toObservable()
                             .subscribe(new Action1<Integer>() {
                                 @Override
                                 public void call(Integer integer) {
-                                    Toast.makeText(getContext(), "test", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Data to the watch has been sent", Toast.LENGTH_SHORT).show();
                                 }
                             });
-
                 }
 
             }
@@ -459,7 +459,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             resolver.delete(WeatherContract.WeatherEntry.CONTENT_URI, WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?", new String[]{Long.toString(dayTime.setJulianDay(julianStartDay - 1)) });
 
             Log.d(LOG_TAG, "Sunshine Service Complete. " + inserted + " Inserted");
-
 
         } catch (JSONException e) {
             setLocationStatus(LOCATION_STATUS_SERVER_INVALID);

@@ -5,4 +5,12 @@
     <dimen name="digital_x_offset">15dp</dimen>
     <dimen name="digital_x_offset_round">25dp</dimen>
     <dimen name="digital_y_offset">90dp</dimen>
+
+    <dimen name="padding">16dp</dimen>
+    <dimen name="padding_half">8dp</dimen>
+    <dimen name="margin">4dp</dimen>
+    <dimen name="time_text_size">24sp</dimen>
+
+    <dimen name="divider_width">30dp</dimen>
+    <dimen name="image_dimens">30dp</dimen>
 </resources>

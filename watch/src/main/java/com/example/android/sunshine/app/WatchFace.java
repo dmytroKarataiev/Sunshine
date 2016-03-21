@@ -23,26 +23,32 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
-import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowInsets;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.wearable.DataMap;
 import com.patloew.rxwear.RxWear;
 import com.patloew.rxwear.transformers.MessageEventGetDataMap;
 
 import java.lang.ref.WeakReference;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
@@ -53,8 +59,6 @@ import rx.functions.Action1;
  * low-bit ambient mode, the text is drawn without anti-aliasing in ambient mode.
  */
 public class WatchFace extends CanvasWatchFaceService {
-    private static final Typeface NORMAL_TYPEFACE =
-            Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
 
     /**
      * Update rate in milliseconds for interactive mode. We update once a second since seconds are
@@ -66,9 +70,6 @@ public class WatchFace extends CanvasWatchFaceService {
      * Handler message id for updating the time periodically in interactive mode.
      */
     private static final int MSG_UPDATE_TIME = 0;
-
-
-
 
     @Override
     public Engine onCreateEngine() {
@@ -97,12 +98,24 @@ public class WatchFace extends CanvasWatchFaceService {
     }
 
     private class Engine extends CanvasWatchFaceService.Engine {
+
+        final int BACKGROUND_COLOR_AMBIENT = Color.BLACK;
+        final int BACKGROUND_COLOR = getColor(R.color.primary);
+        String mHigh_temp = "", mLow_temp = "", mDate = "", mWeatherDesc = "";
+        int mWeather_id = -1;
+
+        private int specW, specH;
+        private View mLayout, face_divider;
+        private TextView face_time, face_date, face_high_temp, face_low_temp, face_weather_desc;
+        private ImageView face_weather_image;
+        private final Point displaySize = new Point();
+
         final Handler mUpdateTimeHandler = new EngineHandler(this);
         boolean mRegisteredTimeZoneReceiver = false;
-        Paint mBackgroundPaint;
-        Paint mTextPaint;
+
         boolean mAmbient;
         Time mTime;
+
         final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -110,7 +123,6 @@ public class WatchFace extends CanvasWatchFaceService {
                 mTime.setToNow();
             }
         };
-        int mTapCount;
 
         float mXOffset;
         float mYOffset;
@@ -125,6 +137,24 @@ public class WatchFace extends CanvasWatchFaceService {
         public void onCreate(SurfaceHolder holder) {
             super.onCreate(holder);
 
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            mLayout = inflater.inflate(R.layout.weather_face, null);
+
+            Display display = ((WindowManager) getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+            display.getSize(displaySize);
+
+            specW = View.MeasureSpec.makeMeasureSpec(displaySize.x, View.MeasureSpec.EXACTLY);
+            specH = View.MeasureSpec.makeMeasureSpec(displaySize.y, View.MeasureSpec.EXACTLY);
+
+            // Find all the views from the layout
+            face_time = (TextView) mLayout.findViewById(R.id.current_time);
+            face_date = (TextView) mLayout.findViewById(R.id.current_date);
+            face_high_temp = (TextView) mLayout.findViewById(R.id.high_temp);
+            face_low_temp = (TextView) mLayout.findViewById(R.id.low_temp);
+            face_weather_image = (ImageView) mLayout.findViewById(R.id.weather_id);
+            face_weather_desc = (TextView) mLayout.findViewById(R.id.weather_desc);
+            face_divider = mLayout.findViewById(R.id.divider);
+
             setWatchFaceStyle(new WatchFaceStyle.Builder(WatchFace.this)
                     .setCardPeekMode(WatchFaceStyle.PEEK_MODE_VARIABLE)
                     .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
@@ -134,24 +164,19 @@ public class WatchFace extends CanvasWatchFaceService {
             Resources resources = WatchFace.this.getResources();
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
 
-            mBackgroundPaint = new Paint();
-            mBackgroundPaint.setColor(resources.getColor(R.color.background));
-
-            mTextPaint = new Paint();
-            mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
-
             mTime = new Time();
 
-            // TODO: Make a layout and bind views. Butterknife
-            // Inflate layout for later use
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            if (BuildConfig.DEBUG) Log.d("Engine", "test ");
+            // Receive info from mobile app
             RxWear.Message.listen()
                     .compose(MessageEventGetDataMap.filterByPath("/sunshine-weather-data"))
                     .subscribe(new Action1<DataMap>() {
                         @Override
                         public void call(DataMap dataMap) {
-                            Log.d("WATCH", "call: " + dataMap.getInt("weather-high") + ", " + dataMap.getInt("weather-id"));
+                            mHigh_temp = dataMap.getString("weather-high");
+                            mLow_temp = dataMap.getString("weather-low");
+                            mDate = dataMap.getString("weather-date");
+                            mWeather_id = dataMap.getInt("weather-id");
+                            mWeatherDesc = dataMap.getString("weather-desc");
                         }
                     });
         }
@@ -162,13 +187,6 @@ public class WatchFace extends CanvasWatchFaceService {
             super.onDestroy();
         }
 
-        private Paint createTextPaint(int textColor) {
-            Paint paint = new Paint();
-            paint.setColor(textColor);
-            paint.setTypeface(NORMAL_TYPEFACE);
-            paint.setAntiAlias(true);
-            return paint;
-        }
 
         @Override
         public void onVisibilityChanged(boolean visible) {
@@ -215,10 +233,6 @@ public class WatchFace extends CanvasWatchFaceService {
             boolean isRound = insets.isRound();
             mXOffset = resources.getDimension(isRound
                     ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
-            float textSize = resources.getDimension(isRound
-                    ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
-
-            mTextPaint.setTextSize(textSize);
         }
 
         @Override
@@ -238,56 +252,66 @@ public class WatchFace extends CanvasWatchFaceService {
             super.onAmbientModeChanged(inAmbientMode);
             if (mAmbient != inAmbientMode) {
                 mAmbient = inAmbientMode;
-                if (mLowBitAmbient) {
-                    mTextPaint.setAntiAlias(!inAmbientMode);
-                }
+
                 invalidate();
+            }
+
+            if (mAmbient) {
+                face_weather_image.setVisibility(View.GONE);
+                face_divider.setBackgroundColor(getResources().getColor(R.color.white));
+            } else {
+                face_weather_image.setVisibility(View.VISIBLE);
+                face_divider.setBackgroundColor(getResources().getColor(R.color.divider));
             }
 
             // Whether the timer should be running depends on whether we're visible (as well as
             // whether we're in ambient mode), so we may need to start or stop the timer.
             updateTimer();
+
+            Typeface font = Typeface.create("sans-serif-condensed",
+                    inAmbientMode ? Typeface.NORMAL : Typeface.BOLD);
+            ViewGroup group = (ViewGroup) mLayout;
+            for (int i = group.getChildCount() - 1; i >= 0; i--) {
+                if (group.getChildAt(i) instanceof TextView) {
+                    ((TextView) group.getChildAt(i)).setTypeface(font);
+                }
+            }
         }
 
         /**
-         * Captures tap event (and tap type) and toggles the background color if the user finishes
-         * a tap.
+         * Layout-based approach to draw WatchFace
+         *
+         * @param canvas on which we draw
+         * @param bounds not used
          */
         @Override
-        public void onTapCommand(int tapType, int x, int y, long eventTime) {
-            Resources resources = WatchFace.this.getResources();
-            switch (tapType) {
-                case TAP_TYPE_TOUCH:
-                    // The user has started touching the screen.
-                    break;
-                case TAP_TYPE_TOUCH_CANCEL:
-                    // The user has started a different gesture or otherwise cancelled the tap.
-                    break;
-                case TAP_TYPE_TAP:
-                    // The user has completed the tap gesture.
-                    mTapCount++;
-                    mBackgroundPaint.setColor(resources.getColor(mTapCount % 2 == 0 ?
-                            R.color.background : R.color.background2));
-                    break;
-            }
-            invalidate();
-        }
-
-        @Override
         public void onDraw(Canvas canvas, Rect bounds) {
-            // Draw the background.
-            if (isInAmbientMode()) {
-                canvas.drawColor(Color.BLACK);
-            } else {
-                canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
-            }
-
-            // Draw H:MM in ambient mode or H:MM:SS in interactive mode.
             mTime.setToNow();
+
             String text = mAmbient
                     ? String.format("%d:%02d", mTime.hour, mTime.minute)
                     : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
-            canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
+            face_time.setText(text);
+
+            face_high_temp.setText(mHigh_temp);
+            face_low_temp.setText(mLow_temp);
+            face_weather_desc.setText(mWeatherDesc);
+
+            SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE, MMM d, yyyy", Locale.getDefault());
+
+            face_date.setText(shortenedDateFormat.format(mTime.toMillis(true)));
+            if (mWeather_id != -1) {
+                face_weather_image.setImageResource(Utility.getArtResourceForWeatherCondition(mWeather_id));
+            }
+
+            mLayout.measure(specW, specH);
+            mLayout.layout(0, 0, mLayout.getMeasuredWidth(), mLayout.getMeasuredHeight());
+
+            canvas.drawColor(Color.BLACK);
+
+            mLayout.setBackgroundColor(mAmbient ? BACKGROUND_COLOR_AMBIENT : BACKGROUND_COLOR);
+
+            mLayout.draw(canvas);
         }
 
         /**
@@ -321,16 +345,5 @@ public class WatchFace extends CanvasWatchFaceService {
                 mUpdateTimeHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIME, delayMs);
             }
         }
-
-        private class LoadWeather extends AsyncTask<Void, Void, Void> {
-            @Override
-            protected Void doInBackground(Void... params) {
-
-
-
-                return null;
-            }
-        }
-
     }
 }
