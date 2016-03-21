@@ -3,6 +3,11 @@ Sunshine v2.0
 
 This is the learning program written following an excellent Udacity course: [Developing Android Apps: Android Fundamentals](https://www.udacity.com/course/ud853)  and all the improvements from course [Advanced Android App Development](https://www.udacity.com/course/ud855-nd).
 
+## Wearable App
+* Layout-based approach to build Watchface.
+* RxWear to perform all data transfers.
+* Square and Round designs.
+
 ## Fundamentals
 * RecyclerView, onClick implementation, LayoutManager
 * Threading and ASyncTask, JSON parsing
