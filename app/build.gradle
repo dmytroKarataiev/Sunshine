@@ -44,6 +44,9 @@ dependencies {
     compile 'com.google.android.gms:play-services-basement:8.4.0'
     compile 'com.patloew.rxwear:rxwear:1.1.0'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.squareup.retrofit2:retrofit:2.0.0-beta4'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.0-beta4'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
 
 }
 

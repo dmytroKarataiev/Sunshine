@@ -44,10 +44,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.net.HttpURLConnection;
@@ -55,6 +52,9 @@ import java.net.URL;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import rx.functions.Action1;
 
 public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
@@ -118,14 +118,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             return;
         }
 
-        // These two need to be declared outside the try/catch
-        // so that they can be closed in the finally block.
-        HttpURLConnection urlConnection = null;
-        BufferedReader reader = null;
-
-        // Will contain the raw JSON response as a string.
-        String forecastJsonStr;
-
         String format = "json";
         int numDays = 14;
 
@@ -165,37 +157,19 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             Log.v(LOG_TAG, url.toString());
 
             // Create the request to OpenWeatherMap, and open the connection
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
+            OkHttpClient client = new OkHttpClient();
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+            Response response = client.newCall(request).execute();
 
-            // Read the input stream into a String
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
-                // Nothing to do.
-                return;
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                line += "\n";
-                buffer.append(line);
-            }
-
-            if (buffer.length() == 0) {
+            if (!response.isSuccessful()) {
                 // Stream was empty.  No point in parsing.
                 setLocationStatus(LOCATION_STATUS_SERVER_DOWN);
-
                 return;
             }
-            forecastJsonStr = buffer.toString();
 
-            getWeatherDataFromJson(forecastJsonStr, params);
+            getWeatherDataFromJson(response.body().string(), params);
 
             // Send a broadcast intent to the widgets
             updateWidgets();
@@ -208,27 +182,12 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             setLocationStatus(LOCATION_STATUS_SERVER_DOWN);
             // If the code didn't successfully get the weather data, there's no point in attempting
             // to parse it.
-            return;
         } catch (JSONException e) {
             setLocationStatus(LOCATION_STATUS_SERVER_INVALID);
             Log.e(LOG_TAG, e.getMessage(), e);
             e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
-                }
-            }
         }
-
-        // This will only happen if there was an error getting or parsing the forecast.
-        return;
-
+        
     }
 
     /**
@@ -489,13 +448,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
         Cursor cursor = resolver.query(WeatherContract.LocationEntry.CONTENT_URI, projection, WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?", new String[] { locationSetting }, null);
 
-        if (cursor.moveToFirst())
-        {
+        if (cursor.moveToFirst()) {
             int locationIndex = cursor.getColumnIndex(WeatherContract.LocationEntry._ID);
             locationId = cursor.getLong(locationIndex);
-        }
-        else
-        {
+        } else {
             cursor.close();
             ContentValues values = new ContentValues();
             values.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
